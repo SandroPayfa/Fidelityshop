@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Utilisateurs{% endblock %}
+{% block breadcrumb_items %}
+	{% if is_current_user == true %}
+		<li>Mon profil</li>
+	{% else %}
+		<li><a href="{{ url('users') }}">Utilisateurs</a></li>
+	{% endif %}
+
+	<li class="active">
+		{% if is_current_user == true %}
+			{{ user.username }}
+		{% else %}
+			Profil de {{ user.username }}
+		{% endif %}
+	</li>
+{% endblock %}
+
+{% if user is defined %}
+
+	{% block body_right %}
+		<div class="panel panel-default table_wrapper">
+			<div class="panel-heading">
+				{% if is_current_user == true %}
+					{{ user.username }}
+				{% else %}
+					Profil de {{ user.username }}
+				{% endif %}
+			</div>
+			<div class="panel-body">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>Licences</th>
+							<th></th>
+							<th>Magasin correspondant</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for licence in user.licences %}
+							<tr>
+								<th>{{ licence.id }}</th>
+								<th>{{ licence.serial }}</th>
+								<th><a href="{{ url('single_shop', {'id': licence.shop.id}) }}">{{ licence.shop.name }}</a></th>
+								<th></th>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+	{% endblock %}
+
+{% endif %}

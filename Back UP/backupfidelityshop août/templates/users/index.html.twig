@@ -1,0 +1,156 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Utilisateurs{% endblock %}
+{% block breadcrumb_items %}<li class="active">Utilisateurs</li>{% endblock %}
+
+{% block body_right %}
+	<div class="panel panel-default table_wrapper">
+		<div class="panel-heading">Utilisateurs FidelityShop <span class="badge badge-primary">{{ users|length }}</span></div>
+		<div class="panel-body">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Nom d'utilisateur</th>
+						<th>Prénom</th>
+						<th>Nom</th>
+						<th>Email</th>
+						<th>Téléphone</th>
+						<th>Rôle</th>
+						<th class="actions_title">Gestions</th>
+						<th class="actions_title">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for user in users %}
+						<tr>
+							<th>{{ user.id }}</th>
+							<td><a href="{{ url('user', {"id": user.id}) }}">{{ user.username }}</a></td>
+							<td>{{ user.firstname }}</td>
+							<td>{{ user.lastname }}</td>
+							<td><a href="mailto:{{ user.email }}"> {{ user.email }}</a></td>
+							<td><a href="tel:{{ user.tel }}">{{ user.tel }}</a></td>
+
+							<td>
+								{% for role in user.roles %}
+									{% if role == 'ROLE_ADMIN' %}Administrateur{% endif %}
+									{% if role == 'ROLE_REVENDEUR' %}Revendeur{% endif %}
+									{% if role == 'ROLE_VENDOR' %}Commerçant{% endif %}
+									{% if role == 'ROLE_CUSTOMER' %}Client{% endif %}									
+									{% if role == 'ROLE_USER' and user.roles|length == 1 %}Utilisateur{% endif %}
+								{% endfor %}
+							</td>
+							<td class="actions">
+
+
+								{% if 'ROLE_ADMIN' not in user.roles %}
+									<a href="{{ url('admin_setRole', {'id': user.id, 'role': 'ROLE_ADMIN'}) }}"
+										data-toggle="tooltip"
+										data-placement="top"
+										title="Ajouter rôle administrateur"
+										onClick="return confirm('Êtes-vous sûr ?')"
+									>
+										<i class="fa-lg fa fa-user-cog text-success"></i>
+									</a>
+								{% endif %}
+								{% if 'ROLE_ADMIN' in user.roles and 'ROLE_ADMIN' in app.user.roles %}
+									<a href="{{ url('admin_unsetRole', {'id': user.id, 'role': 'ROLE_ADMIN'}) }}"
+										data-toggle="tooltip"
+										data-placement="top"
+										title="Retirer rôle administrateur"
+										onClick="return confirm('Êtes-vous sûr ?')"
+									>
+										<i class="fa-lg fa fa-user-cog text-danger"></i>
+									</a>
+								{% endif %}
+
+
+								{% if 'ROLE_VENDOR' not in user.roles %}
+									<a href="{{ url('admin_setRole', {'id': user.id, 'role': 'ROLE_VENDOR'}) }}"
+										data-toggle="tooltip"
+										data-placement="top"
+										title="Ajouter rôle commerçant"
+										onClick="return confirm('Êtes-vous sûr ?')"
+									>
+										<i class="fa-lg fa fa-user-tie text-success"></i>
+									</a>
+								{% endif %}
+								{% if 'ROLE_VENDOR' in user.roles %}
+									<a href="{{ url('admin_unsetRole', {'id': user.id, 'role': 'ROLE_VENDOR'}) }}"
+										data-toggle="tooltip"
+										data-placement="top"
+										title="Retirer rôle commerçant"
+										onClick="return confirm('Êtes-vous sûr ?')"
+									>
+										<i class="fa-lg fa fa-user-tie text-danger"></i>
+									</a>
+
+
+
+								{% endif %}
+
+
+								{% if 'ROLE_CUSTOMER' not in user.roles %}
+									<a href="{{ url('admin_setRole', {'id': user.id, 'role': 'ROLE_CUSTOMER'}) }}"
+										data-toggle="tooltip"
+										data-placement="top"
+										title="Ajouter rôle client"
+										onClick="return confirm('Êtes-vous sûr ?')"
+									>
+										<i class="fa-lg fa fa-user-tag text-success"></i>
+									</a>
+								{% endif %}
+								{% if 'ROLE_CUSTOMER' in user.roles %}
+									<a href="{{ url('admin_unsetRole', {'id': user.id, 'role': 'ROLE_CUSTOMER'}) }}"
+										data-toggle="tooltip"
+										data-placement="top"
+										title="Retirer rôle client"
+										onClick="return confirm('Êtes-vous sûr ?')"
+									>
+										<i class="fa-lg fa fa-user-tag text-danger"></i>
+									</a>
+								
+								{% endif %}
+
+
+								{% if 'ROLE_REVENDEUR' not in user.roles %}
+									<a href="{{ url('admin_setRole', {'id': user.id, 'role': 'ROLE_REVENDEUR'}) }}"
+										data-toggle="tooltip"
+										data-placement="top"
+										title="Ajouter rôle revendeur"
+										onClick="return confirm('Êtes-vous sûr ?')"
+									>
+										<i class="fa-lg fa fa-user-cog text-success"></i>
+									</a>
+								{% endif %}
+								{% if 'ROLE_REVENDEUR' in user.roles %}
+									<a href="{{ url('admin_unsetRole', {'id': user.id, 'role': 'ROLE_REVENDEUR'}) }}"
+										data-toggle="tooltip"
+										data-placement="top"
+										title="Retirer rôle revendeur"
+										onClick="return confirm('Êtes-vous sûr ?')"
+									>
+										<i class="fa-lg fa fa-user-cog text-danger"></i>
+									</a>
+
+
+								{% endif %}
+							</td>
+							<td>
+								<a href="{{ url('admin_deleteUser', {'id': user.id}) }}"
+										data-toggle="tooltip"
+										data-placement="top"
+										title="Supprimer l'utilisateur"
+										onClick="return confirm('Êtes-vous sûr ?')"
+									>
+									<i class="fa-lg fa fa-times text-danger"></i>
+								</a>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+{% endblock %}

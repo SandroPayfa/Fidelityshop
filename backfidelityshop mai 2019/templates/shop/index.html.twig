@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Magasins{% endblock %}
+{% block breadcrumb_items %}<li class="active">Magasins</li>{% endblock %}
+
+{% block body_right %}
+
+	<div class="panel panel-default table_wrapper">
+		<div class="panel-heading">Mes programmes de fidelité : 
+		
+
+		<a href="{{ url('new_shop') }}" class="btn btn-sm btn-primary float-right">Ajouter Magasin</a></div>
+		
+		<div class="panel-body">
+
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Magasins</th>
+						<th>Nombre de points total cumulé</th>
+						{% if  'ROLE_ADMIN'  in app.user.roles or 'ROLE_VENDOR' in app.user.roles %} 
+							<th>
+							Action
+							</th>
+							{% endif %}
+					</tr>
+				</thead>
+				<tbody>
+				{% set role = 'ROLE_CUSTOMER' %} 
+					{% for r in app.user.roles %}
+								{% if r != 'ROLE_CUSTOMER' %}
+									{% set role = r %} 
+									{% endif %}
+
+				{% endfor %}    
+					{% for shop in shops %}
+
+						{% set points = 0 %}
+						{% for tr in shop.transactions %}
+							{% set points = points + tr.points %}
+						{% endfor %}
+						<tr>
+							<td>{{ shop.id }}</td>
+							<td><a href="{{ url('single_shop', {'id': shop.id}) }}">{{ shop.name }}</a></td>
+							<td>
+					
+							 {% if  'ROLE_ADMIN'  not in app.user.roles and 'ROLE_VENDOR' not in app.user.roles %} 
+							{{ shop.points }}
+							{% else %}
+							{{points}}
+							{% endif %}
+							 pts
+							</td>
+							{% if  'ROLE_ADMIN'  in app.user.roles or 'ROLE_VENDOR' in app.user.roles %} 
+							<td>
+							{% if  'ROLE_ADMIN'  in app.user.roles %} 
+								<a href="{{ url('delete_shop', {'id': shop.id}) }}" data-toggle="tooltip" data-placement="top" title=""
+								 onclick="return confirm('Êtes-vous sûr ?')" data-original-title="Supprimer ce magasin">
+									<i class="fa-lg fa fa-times text-danger"></i>
+								</a>
+								{% endif %}
+								<a href="{{ url('update_shop', {'id': shop.id}) }}" data-toggle="tooltip" data-placement="top" title="Update magasin">
+									<i class="fa-lg fa fa-pen text-primary"></i>
+								</a>
+							</td>
+							{% endif %}
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+{% endblock %}

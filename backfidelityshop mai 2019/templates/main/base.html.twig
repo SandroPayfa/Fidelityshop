@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body_right %}
+	<div class="row panel panel-container stats_wrapper">
+		{% block stats_cards %}{% endblock %}
+	</div>
+
+	<div class="panel panel-default table_wrapper">
+		<div class="panel-heading">{% block panel_title %}{% endblock %}</div>
+		<div class="panel-body">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						{% block table_header %}{% endblock %}
+					</tr>
+				</thead>
+				<tbody>
+					{% block table_body %}{% endblock %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+
+<script type="text/javascript">
+    setTimeout(function () { 
+      location.reload();
+    }, 10000);
+</script>
+
+
+{% endblock %}
+

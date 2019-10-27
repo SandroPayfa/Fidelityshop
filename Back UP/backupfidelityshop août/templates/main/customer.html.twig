@@ -1,0 +1,51 @@
+{% extends 'main/base.html.twig' %}
+
+{% block stats_cards %}
+	<div class="col-xs-6 col-md-4 col-lg-4 card">
+		<i class="fas fa-3x fa-money-bill-wave-alt color-blue"></i>
+		<div class="title large">{{ nb_points }}</div>
+		<div class="subtitle text-muted">Points cumulés</div>
+	</div>
+	<div class="col-xs-6 col-md-4 col-lg-4 card">
+		<i class="fas fa-3x fa-shopping-basket color-orange"></i>
+		<div class="title large">{{ app.user.transactions|length }}</div>
+		<div class="subtitle text-muted">Transaction{% if app.user.transactions|length > 1 %}s{% endif %}</div>
+	</div>
+	<div class="col-xs-6 col-md-4 col-lg-4 card">
+		<i class="fas fa-3x fa-user color-teal"></i>
+		<div class="title large">{% if nb_shops is defined %}{{ nb_shops }}{% endif %}</div>
+		<div class="subtitle text-muted">Adhésion{% if nb_shops > 1 %}s{% endif %}</div>
+	</div>
+{% endblock %}
+
+{% block panel_title %}Mes transactions <span class="badge badge-primary">{{ transactions|length }}</span>{% endblock %}
+
+{% block table_header %}
+	<th>#</th>
+	<th>Montant</th>
+	<th>Points cumulés</th>
+	<th>Magasin</th>
+	<th>Date</th>
+{% endblock %}
+
+
+{% block table_body %}
+	{% for transaction in transactions %}
+		{% if transaction.type=='used' %}
+						<tr style="background-color:#64dd17;color:#fff;" >
+						<th>{{ transaction.id }}</th>
+							<td>Montant Offert</td>
+							<td>{{ transaction.amount }} €</td>
+							<td><a style="color:#fff; "
+					{% else %}
+					<tr>
+					<th>{{ transaction.id }}</th>
+							<td>{{ transaction.amount }} €</td>
+							<td>{{ transaction.points|default(0) }} Pts</td>
+							<td><a
+					{% endif %}
+			 href="{{ url('single_shop', {'id': transaction.shop.id}) }}">{{ transaction.shop.name }}</a></td>
+			<td>{{ transaction.date|date('d/m/Y à H\\hi:s') }}</td>
+		</tr>
+	{% endfor %}
+{% endblock %}

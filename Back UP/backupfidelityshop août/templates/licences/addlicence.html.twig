@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Licences{% endblock %}
+{% block breadcrumb_items %}<li class="active">Licences</li>{% endblock %}
+
+{% block body_right %}
+
+	<div class="panel panel-default table_wrapper">
+		<div class="panel-heading">Licences <span class="badge badge-primary">Comptes</span>
+		<a href="{{ url('licences') }}" class="btn btn-sm btn-primary float-right">Toutes les Licences</a>
+
+		</div>
+		<div class="panel-body">
+		
+			<h2 class="card-title">Ajouter Licence</h2>
+					<div class="row">
+						{{ form_start(addlicenceForm, {'attr': {
+							'class': 'col-12',
+							}}) }}
+
+							<div class="form-group">
+								{{ form_errors(addlicenceForm.pin) }}
+ 								{{ form_widget(addlicenceForm.pin, {'attr': {
+									'class': 'form-control',
+									'placeholder': 'Pin',
+									'style' : 'display:none',
+									'value'  : '1111'
+								}}) }}
+							</div> 
+			<h6 class="card-title">Sélectionnez le magasin</h6>
+
+						{#	<div class="form-group">
+								{{ form_errors(addlicenceForm.terminal_id) }}
+ 								{{ form_widget(addlicenceForm.terminal_id, {'attr': {
+									'class': 'form-control',
+									'placeholder': 'terminal id',
+									'value'  : ''
+								}}) }}
+							</div> #}
+
+							<div class="form-group">
+								{{ form_errors(addlicenceForm.magasin) }}
+ 								{{ form_widget(addlicenceForm.magasin, {'attr': {
+									'class': 'form-control',
+								}}) }}
+							</div>
+
+			<h6 class="card-title">Choissisez la période de validité</h6>
+
+
+							<div class="form-group">
+								{{ form_errors(addlicenceForm.periode) }}
+ 								{{ form_widget(addlicenceForm.periode, {'attr': {
+									'class': 'form-control',
+									
+								}}) }}
+							</div>
+
+							
+
+						
+						
+					</div>
+
+
+		<div class="panel panel-default table_wrapper">
+		<a href="{{ url('licences') }}" class="btn btn-sm btn-primary float-right">Retour</a>
+							<button type="submit"  class="btn btn-primary float-left">Ajouter</button>
+						{{ form_end(addlicenceForm) }}
+
+		</div>
+
+
+		</div>
+	</div>
+
+{% endblock %}

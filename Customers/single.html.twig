@@ -1,0 +1,120 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Utilisateurs{% endblock %}
+{% block breadcrumb_items %}
+	{% if is_current_user == true %}
+		<li class="active">{{ user.username }}</li>
+	{% else %}
+		<li><a href="{{ url('customers') }}"> Clients</a></li>
+		<li class="active">{{ user.firstname }} {{ user.lastname }} </li>
+	{% endif %}
+{% endblock %}
+
+{% if user is defined %}
+
+	{% block body_right %}
+		<div class="panel panel-default table_wrapper">
+			<div class="panel-heading">
+				{% if is_current_user == true %}
+					{{ user.username }}
+				{% else %}
+					<i class="fas fa-user"></i> Client - {{ user.firstname }} {{ user.lastname }} 
+				{% endif %}
+				
+<!-- Nombre de points restant
+					-->
+		<a href="{{ url('customers') }}" class="btn btn-sm btn-primary float-right">Tout mes clients</a>
+
+
+			</div>
+
+
+			<div class="panel-body row">
+
+				<div class="card col-md-3 p-0 m-3">
+					<div class="card-header"><b><i class="fas fa-info"></i> Informations sur votre client</b></div>
+					<div class="card-content">
+						<ul class="list-group list-group-flush">
+							<li class="list-group-item"><b>ID :</b> {{ user.id }}</li>
+							<!-- <li class="list-group-item">Nom d'utilisateur : {{ user.username }}</li>
+							 -->
+							 <li class="list-group-item"><b> <i class="fas fa-phone"></i> Téléphone : </b><a href="tel:{{ user.tel }}">{{ user.tel }}</a></li>
+							<li class="list-group-item"><b><i class="fas fa-user"></i> Nom :</b> {{ user.lastname }}</li>
+							<li class="list-group-item"><b><i class="fas fa-user"></i> Prénom :</b> {{ user.firstname }}</li>
+							<li class="list-group-item"><b><i class="fas fa-envelope-open-text"></i> E-mail :</b> <a href="{{ user.email }}">{{ user.email }}</a></li>
+							<li class="list-group-item"><b><i class="fas fa-map-marker-alt"></i> Code postal :</b> {{ user.zip }}</li>
+							<li class="list-group-item"><b><i class="fas fa-city"></i> Ville : </b>{{ user.city }}</li>
+			<!-- <li class="list-group-item"><b>Date d'inscription : </b></li>-->
+					
+						</ul>
+					</div>
+				</div>
+
+				
+
+				<div class="card col-md-6 p-0 m-3">
+					<div class="card-header"><b><i class="fas fa-plus-circle"></i> Adhésions <i class="fas fa-coins"></i> Points disponible</b></div>
+					<div class="card-content">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+								<center>
+									<th>#</th>
+									<th><center><i class="fas fa-store"></i> Shop</center></th>
+									<th><i class="fas fa-coins"></i> Nombre de Points</th>
+									<th><i class="fas fa-coins"></i> Points restant</th>
+									</center>
+								</tr>
+							</thead>
+							<tbody>
+								{% for point in points %}
+									<tr>
+										<td>{{ point.shop_id }}</td>
+										<td>										
+										<center>
+											<li class="list-group-item"><a href="{{ url('shop', {'id': point.shop_id}) }}">{{ point.shop_name }}</a>  </li>
+										</center>
+										</td>
+										<td><center>{{ point.points }} <i class="fas fa-coins"></i> </center></td>
+										<td><center>{{ point.points - point.used_points}} <i class="fas fa-coins"></i> </center></td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="card col-md-10 p-0 m-3">
+					<div class="card-header"><b>Toute les transactions</b></div>
+					<div class="card-content">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th><i class="fas fa-euro-sign"></i> Montant</th>
+									<th><i class="fas fa-coins"></i> Points</th>
+									<th><i class="fas fa-store"></i> Magasins</th>
+									<th><i class="fas fa-calendar-day"></i> Date <i class="fas fa-clock"></i> Heure</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for tr in user.transactions %}
+									<tr>
+										<th>{{ tr.id }}</th>
+										<th>{{ tr.amount }}€</th>
+										<th>{{ tr.points }} </th>
+										<td><a href="{{ url('shop', {'id': tr.shop.id}) }}">{{ tr.shop.name }}</a></td>
+										<td>{{ tr.date|date('d/m/Y - H\\hi:s') }}</td>
+										
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+	{% endblock %}
+
+{% endif %}

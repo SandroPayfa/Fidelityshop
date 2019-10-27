@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Clients{% endblock %}
+{% block breadcrumb_items %}<li class="active">Clients</li>{% endblock %}
+
+{% block body_right %}
+	<div class="panel panel-default table_wrapper">
+		<div class="panel-heading">Clients participant à votre programme de fidélité :</div>
+		<div class="panel-body">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th><i class="fas fa-user"></i> Prénom et Nom</th>
+						<th><i class="fas fa-phone"></i> Numéro</th>
+						<th><i class="fas fa-envelope-open-text"></i> E-mail</th>
+						<th><i class="fas fa-plus-circle"></i> Date d'inscription</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% if customers|length > 0 %}
+						{% for shop_cust in customers %}
+							{% for cust in shop_cust %}
+								<tr>
+									<th>{{ cust.id }}</th>
+									<td><a href="{{ url('customer', {'id': cust.id}) }}">
+									{% if cust.firstname != '' and cust.lastname != '' %}
+									{{ cust.firstname }} {{ cust.lastname }}
+									{% else %}
+									Profile {{cust.id}}
+									{% endif %}
+									</a>
+									</td>
+									<td>{{ cust.tel }}</td>
+									<td>{{ cust.email }}</td>
+									<td>{% if cust.created != null %}
+									{{ cust.created |date('d-m-Y') }}
+									{% endif %}</td>
+								</tr>
+							{% endfor %}
+						{% endfor %}
+					{% endif %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+{% endblock %}

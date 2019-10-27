@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>Mailing Maketing</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/color-picker.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/color-picker.js"></script>
+    <script src="js/zoo.min.js"></script>
+    <script src="js/main.js"></script>
+</head>
+<body>
+    <div class="container-fluid">
+        <div id="InterfaceLowToLoad">
+            <i class="material-icons d-block text-danger" style="font-size:50px">report</i>
+            Votre appareil ne peut pas supporter <br>
+            Veuillez utiliser une tablette ou un ordinateur
+        </div>
+        <div class="row" id="EditeEmailZoneParent">
+            <div class="col-12 mb-4">
+                <div class="card card-small">
+                    <div class="card-header border-bottom">
+                        <div class="row mb-4 border-bottom">
+                            <div class="col-6">
+                                <div class="rounded border bg-white" id="listEmail">
+                                    <div class="row pt-2 pb-2 bg-light">
+                                        <div class="col-12">
+                                            <div class="custom-control custom-checkbox ml-2">
+                                                <input type="checkbox" class="custom-control-input bg-white" id="selectAllEmails" checked>
+                                                <label class="custom-control-label" for="selectAllEmails" id="allEml">Tous</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input type="text" data="{{emails}}" id="preliste" hidden>
+                                    <div class="d-block" id="listeEmail"></div>
+                                    <div class="row border-top pt-2">
+                                        <div class="col-6 pl-5 pt-2 font-weight-bold" id="allSelectNumber">0 Selection</div>
+                                        <div class="col-6 text-right" style="font-size:12px"><button class="btn btn-primary mr-3" id="add_email_from_pre" disabled>Ajouter <i style="font-size:20px;padding-top:3px" class="material-icons float-right">play_arrow</i></button></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                    <label class="destinataires-champ d-block border rounded mt-1 mb-4" id="destinataires-champ">
+                                        <input class="border-0  d-inline-block" type="text" placeholder="Destinataire(s)">
+                                    </label>
+                            </div>
+                        </div>
+                        
+                        
+                        <input id="listReceptor" name="listReceptor" type="text" hidden="">
+                        <input id="objetBox" name="objetBox" class="form-control form-control-lg mb-3" type="text" placeholder="Objet">
+                    </div>
+                    <div class="card-body pt-0">
+                        <div class="row pt-2   mt-2">
+                            <div class="content-mail-web col-3 col-md-4 col-3">
+                                <ul class="item-zoo-mak border rounded mb-2">
+                                    <li> <a href="?list" class="itm_g item_on-g" for="content"><i class="material-icons">view_agenda</i><span>Contenu</span></a> </li>
+                                    <li> <a href="?mail" class="itm_g" for="style"><i class="material-icons ">color_lens</i><span>Styles</span></a> </li>
+                                </ul>
+                                <div class="tablea-gestion" id="content">
+                                    <div class="btn_select_layout border rounded" for="one-h"><i class="material-icons">text_fields</i><span class="d-block">Titre</span></div>
+                                    <div class="btn_select_layout border rounded" for="one-p"><i class="material-icons">sort</i><span class="d-block">Paragraphe</span></div>
+                                    <div class="btn_select_layout border rounded" for="one-double-column"><i class="material-icons">vertical_split</i><span class="d-block">Deux colonnes</span></div>
+                                    <div class="btn_select_layout border rounded" for="one-l"><i class="material-icons">remove</i><span class="d-block">Ligne</span></div>
+                                    <div class="btn_select_layout border rounded" for="one-table"><i class="material-icons">art_track</i><span class="d-block">Image + légende</span></div>
+                                    <div class="btn_select_layout border rounded" for="one-image"><i class="material-icons">perm_media</i><span class="d-block">Image</span></div>
+                                </div>
+                                <div class="tablea-gestion" id="style">
+                                    <b class="mt-3 mb-3 d-block border-top pt-1">Couleur Arrière plan</b>
+                                    <div class="row border-bottom">
+                                        <div class="col-12  mt-1">
+                                            <label class="d-block" style="width:120px">
+                                                <div class="input-group mb-2">
+                                                    <div class="input-group-prepend">
+                                                        <div class="input-group-text"><i class="material-icons">format_color_fill</i></div>
+                                                    </div>
+                                                    <input type="text" for="p" class="style_action_papier bg-color form-control" name="background" style="height:40px;" value="#000000">
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="categori_style">
+                                        <b class="mt-3 mb-3 d-block">Disposition</b>
+                                        <div class="row border-bottom">
+                                            <div class="col-12  mt-1">
+                                                <label class="d-block">
+                                                    <div class="">
+                                                        <a href="" class="style_action_sup style_btn rounded-circle" for="up"><i class="material-icons">keyboard_arrow_up</i></a>
+                                                        <a href="" class="style_action_sup style_btn rounded-circle ml-2" for="down"><i class="material-icons">keyboard_arrow_down</i></a>
+                                                        <a href="" class="style_action_sup style_btn rounded-circle border-0 btn-danger ml-3" for="delete"><i class="material-icons">delete</i></a>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="categori_style__">
+                                        <div class="row border-bottom">
+                                            
+                                            <div class="col-12  mt-1">
+                                                <b class="mt-3 mb-1 d-block">Image</b>
+                                                <form  action="file.php" method="post"  enctype="multipart/form-data" id="add_file" target="add_produit_traitement">
+                                                    <div class="btn btn-primary file_piece rounded" id="file_produit">
+                                                        <span>Changer l'image</span>
+                                                        <input type="file" accept="image/*" name="file_produit" id="c_file_produit" />
+                                                    </div>
+                                                    <input type="text" name="is_load" hidden/>
+                                                </form>
+                                                <iframe name="add_produit_traitement" hidden></iframe>
+                                            </div>
+                                            
+                                            <div class="col-6  mt-1">
+                                                <span class="mt-3 mb-1 d-block">Taille</span>
+                                                <label class="d-block" style="width:100%">
+                                                    <div class="input-group mb-2">
+                                                        <input type="number" class="style_action_img form-control" name="width"  value="0">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text">px</div>
+                                                        </div>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                            <div class="col-6  mt-1">
+                                                <span class="mt-3 mb-1 d-block">Position X</span>
+                                                <label class="d-block" style="width:100%">
+                                                    <div class="input-group mb-2">
+                                                        <input type="number" class="style_action_img form-control" name="margin-left"  value="0">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text">px</div>
+                                                        </div>
+                                                    </div>
+                                                </label>
+                                                <span class="mt-3 mb-1 d-block">Position Y</span>
+                                                <label class="d-block" style="width:100%">
+                                                    <div class="input-group mb-2">
+                                                        <input type="number" class="style_action_img form-control" name="margin-top"  value="0">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text">px</div>
+                                                        </div>
+                                                    </div>
+                                                </label>
+                                                
+                                            </div>
+                                            <div class="col-6  mt-1">
+                                               
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="categori_style_">
+                                        <b class="mt-3 mb-3 d-block">Ligne style </b>
+                                        <div class="row border-bottom">
+                                            <div class="col-md-6 mb-3">
+                                                <label class="d-block">
+                                                    <div class="input-group mb-2">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text"><i class="material-icons">format_color_fill</i></div>
+                                                        </div>
+                                                        <input type="text" class="style_action_line bg-color form-control" name="border-color" style="height:40px" value="">
+                                                    </div>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>
+                                                    <select class="style_action_line  custom-select mt-1" name="border-width">
+                                                        <option selected>Taille</option>
+                                                        <option value="1px">1</option>
+                                                        <option value="2px">2</option>
+                                                        <option value="3px">3</option>
+                                                        <option value="4px">4</option>
+                                                        <option value="5px">5</option>
+                                                        <option value="6px">6</option>
+                                                        <option value="7px">7</option>
+                                                        <option value="8px">8</option>
+                                                        <option value="9px">9</option>
+                                                        <option value="10px">10</option>
+                                                        <option value="11px">11</option>
+                                                        <option value="12px">12</option>
+                                                        <option value="13px">13</option>
+                                                        <option value="14px">14</option>
+                                                        <option value="15px">15</option>
+                                                    </select>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="categori_style">
+                                        <b class="mt-3 mb-3 d-block">Remplissage </b>
+                                        <div class="row border-bottom">
+                                            <div class="col-md-6 mb-3">
+                                                <label class="d-block">
+                                                    <div class="input-group mb-2">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text"><i class="material-icons">format_color_fill</i></div>
+                                                        </div>
+                                                        <input type="text" class="style_action bg-color form-control" name="background" style="height:40px" value="#000000">
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                   
+                                    <div class="categori_style" id="text-block">
+                                        <b class="mt-3 mb-3 d-block">Texte Style</b>
+                                        <div class="row">
+                                            <div class="col-12 mb-3">
+                                                <label class="d-block">
+                                                    <span class="d-block"></span>
+                                                    <select name="font-family" class="style_action custom-select mt-1">
+                                                        <option selected>Police du texte</option>
+                                                        <option value="arial">Arial</option>
+                                                        <option value="charcoal">Charcoal</option>
+                                                        <option value="courier">Courier</option>
+                                                        <option value="gadget">Gadget</option>
+                                                        <option value="geneva">Geneva</option>
+                                                        <option value="georgia">Georgia</option>
+                                                        <option value="impact">Impact</option>
+                                                        <option value="monospace">Monospace</option>
+                                                        <option value="palatino">Palatino</option>
+                                                        <option value="sans-serif">Sans-serif</option>
+                                                        <option value="serif">Serif</option>
+                                                        <option value="tahoma">Tahoma</option>
+                                                        <option value="times">Times</option>
+                                                        <option value="verdana">Verdana</option>
+                                                        <option value="Times New Roman">Times New Roman</option>
+                                                    </select>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>
+                                                    <select class="taill_element style_action custom-select mt-1" name="font-size">
+                                                        <option selected>Taille</option>
+                                                    </select>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>
+                                                    <span class="d-block"></span>
+                                                    <select class="style_action custom-select mt-1" name="text-align">
+                                                        <option selected>Alignement</option>
+                                                        <option value="center">Centre</option>
+                                                        <option value="left">Droite</option>
+                                                        <option value="right">Gauche</option>
+                                                        <option value="justify">Justifier</option>
+                                                    </select>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-6 border-bottom mt-3">
+                                                <label class="d-block">
+
+                                                <div class="">
+                                                    <a href="" class="style_action_sup style_action style_btn" id="bold" for="bold"><i class="material-icons">format_bold</i></a>
+                                                    <a href="" class="style_action_sup style_action style_btn" id="italic" for="italic"><i class="material-icons">format_italic</i></a>
+                                                </div>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-6 border-bottom mt-3">
+                                                <label class="d-block">
+                                                    <div class="input-group mb-2">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text"><i class="material-icons">format_color_text</i></div>
+                                                        </div>
+                                                        <input type="text" class="style_action bg-color form-control" name="color" style="height:40px" value="#000000">
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="content-mail-web col-9 col-md-8 col-9 pt-2" id="zoneTemplate">
+                                <center style="font-family:arial"></center>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer border-top">
+                        <input type="text" id="nameTemplate" hidden>
+                        <button class="btn btn-primary float-right" id="do_perce">Envoyer <i class="material-icons ml-2 float-right">send</i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/color-picker.js"></script>
+</body>
+</html>

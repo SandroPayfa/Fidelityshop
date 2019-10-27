@@ -1,0 +1,365 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Actualités{% endblock %}
+{% block breadcrumb_items %}<li><a href="{{ url('news') }}">Actualités</a></li><li class="active">SMS</li>{% endblock %}
+
+{% block body_right %}
+
+ <div class="container-fluid" style="font-size:80% ! important">
+        <div id="InterfaceLowToLoad">
+            <i class="material-icons d-block text-danger" style="font-size:50px">report</i>
+            Votre appareil ne peut pas supporter <br>
+            Veuillez utiliser une tablette ou un ordinateur
+        </div>
+        <div class="row" id="app-vue">
+            <div class="col-12 mb-4">
+                <div class="card card-small">
+                    <div class="card-header border-bottom" >
+                        <div class="row ">
+                            <div class="col-6">
+                                <div class="rounded border bg-white" id="listEmail">
+                                    <div class="row pt-2 pb-2 bg-light">
+                                    
+                                        <div class="col-12">
+                                            <div class="custom-control custom-checkbox " style="border-bottom : 1px solid rgb(193, 190, 190);">
+                                                <label >Saisissez les numéros des destinataires</label>
+                                            </div>
+                                            
+                                            <div class="custom-control custom-checkbox ml-2">
+                                                <input type="checkbox" v-model="allChecked" class="custom-control-input bg-white" >
+                                                <label v-on:click="addAllNum"  class="custom-control-label" >Tous</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="listeEmail" >
+                                        <div v-for="(number,index) in numbers" class="col-12"  v-if="!number.added">
+                                            <div class="custom-control custom-checkbox ml-2">
+                                                <input type="checkbox" v-model="number.checked" class="custom-control-input bg-white">
+                                                <label style="cursor:pointer" v-on:click="addNum(index)"  class="custom-control-label" >${number.num} </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row border-top pt-0">
+                                        <div v-if="checkedSize < 2" class="col-6 pl-5 mt-3 font-weight-bold" id="allSelectNumber">${checkedSize} Selection</div>
+                                        <div v-else class="col-6 pl-5 mt-3 font-weight-bold" id="allSelectNumber">${checkedSize} Selections</div>
+                                        
+                                        <div class="col-6 pt-2 pl-2" >
+                                              <button style="float:right" v-on:click="addToList" class="btn btn-primary btn-xs p-1" >Ajouter 
+                                              <i class="fa fa-caret-right ml-2 float-right" aria-hidden="true"></i>
+                                              </button>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 " >
+                                    <label  class="destinataires-champ d-block border rounded mt-1 p-0 mb-0" id="destinataires-champ">
+                                        <input  class="border-0 m-0 d-inline-block" type="text" placeholder="Destinataire(s)">
+                                        <button class="btn btn-danger btn-sm mr-1 mt-1 float-right" v-on:click="removeAll"> Clear list </button>
+                                        <ul  style="overflow-y: scroll;overflow-x: hidden;height:181px" class="list-group">
+                                        <li class="list-group-item" v-for="(number,index) in numbers" class="col-12"  v-if="number.added" >${number.num} <i aria-hidden="true" v-on:click="removeFromList(index)" class="ml-4 fa fa-times" style="color:#f00;cursor:pointer;font-size:150%"></i></li>
+                                        </ul>
+                                    </label>
+                                    
+                            </div>
+                        </div>
+                         <div class="card-footer  row ml-0 mt-0 border-top">
+                            <div class="col-sm-7 p-0">
+                            <h3 class="bb-2 pb-2">Composer un message</h3>
+                            <div class="form-group" >
+                               <div style="padding-right:20%">
+                                   <label for="sms-content">Message</label>
+                              <textarea v-model="parameters.smsContent" class="form-control" id="sms-content" placeholder="Votre message" rows="3"></textarea>
+                              <div class="custom-control  ">
+                                <label class="m-0 float-right">Caractères restants : <span style="font-weight: bolder;font-size:100%;color:#000">${charLeft}</span> / 160</label><br/>
+                                <label class="m-0 float-right">Equivaut à ${nombreSMS} SMS</label>
+                              </div>
+                               </div>
+                               <label class="mt-2 ">Le Message <span style="font-weight: bolder;font-size:100%;color:#000">"STOP:[numéro court]"</span> est ajouté à la fin du SMS</label><br/>
+                                <label class=" ">Pour des raisons légales, votre SMS ne sera envoyé qu'<span style="font-weight: bolder;font-size:100%;color:#000">entre 8 h et 20 h, du lundi au samedi.</span></label><br/>
+                               <div class="col-12">
+                                <div class="custom-control custom-checkbox ml-0">
+                                  <input type="checkbox" class="custom-control-input bg-white"  v-model="approved">
+                                   <label v-on:click="checkApproved" style="cursor: pointer;" class="custom-control-label">Je cértifie sur l'honneur que le SMS n'est pas à caractère publicitaire et demande le retrait du message STOP.</label></div>
+   </div>
+                            </div>
+                          </div>
+                            <div class="col-sm-5 pt-2">
+                            <h5 class="bb-2 pb-2">Type d'envoie</h5>
+                               <div class="row pt-2  pb-2 bg-light">
+                                        <div class="col-12">
+                                            <div class="custom-control custom-checkbox ml-2">
+                                                <input type="checkbox" v-model="sendNow" class="custom-control-input bg-white" >
+                                                <label v-on:click="sendTime('now')"  class="custom-control-label" >Envoie immédiat</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="custom-control custom-checkbox ml-2">
+                                                <input type="checkbox" v-model="sendLater" class="custom-control-input bg-white" >
+                                                <label v-on:click="sendTime('later')"  class="custom-control-label" >Envoie différé</label>
+                                            </div>
+                                             <div v-if="sendLater">
+                                             <vuejs-datepicker :typeable="false">
+                                               </vuejs-datepicker>
+                                             </div>
+                                        </div>
+                                    </div>
+
+                          </div>
+                              <div class="col-sm-12 text-right">
+                                      <button style="float:right" v-on:click="sendMessages" class="btn btn-primary btn-sm p-1" >Envoyer <i class="fa fa-paper-plane ml-2 mr-2 mb-1 float-right" aria-hidden="true"></i></button>
+                              </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.33.1/sweetalert2.min.js"></script>
+<script src="https://unpkg.com/vuejs-datepicker"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+
+<script>
+let user_id= []
+let cp=0;
+{% for client in clients %}
+  user_id.push(
+    {
+      id : ++cp,
+      num: '{{client}}',
+      checked:false,
+      added:false
+    })
+  
+{% endfor %}
+
+new Vue({
+  el: '#app-vue',
+  components: {
+  	vuejsDatepicker
+  },
+    delimiters: ['${', '}'],
+  data() {
+    return {
+    parameters : {
+          numbers_list : [],
+          smsContent : ""
+        },
+      checkedSize : 0,
+    allChecked : false,
+    sendLater : false,
+    sendNow : true,
+    approved : false,
+    numbers: []
+  }
+  },
+  computed: {
+    charLeft: function () {
+      let charL = 160-this.parameters.smsContent.length
+      return (charL>0)?charL:0
+    },
+    nombreSMS : function () {
+      let charL = 160-this.parameters.smsContent.length
+      return parseInt((this.parameters.smsContent.length-1)/160)+1
+    },
+  },
+  beforeMount:function(){
+    this.numbers=user_id
+  },
+  created: function () {
+    
+  },
+  methods: {
+    addToList:  function(index) {
+      for(let i = 0; i < this.numbers.length; i++){
+           if(this.numbers[i].checked ){
+             this.numbers[i].added=true
+           }
+        }
+        this.checkedSize=0
+        this.allChecked=false
+    },
+    removeFromList : function(index) {
+             this.numbers[index].added=false
+             this.numbers[index].checked=false
+             let cp=0
+             for(let i = 0; i < this.numbers.length; i++){
+              if(this.numbers[i].added ){
+                cp++
+              }
+            }
+            
+            this.allChecked=false
+    },
+    checkApproved:function(){
+      if(this.approved){
+        this.approved=false
+      }else{
+        this.approved=true
+      }
+      
+    },
+    addNum:  function(index) {
+      if(this.numbers[index].checked){
+        this.allChecked=false
+        this.numbers[index].checked=false
+         this.checkedSize=this.checkedSize-1
+      }else{
+        this.numbers[index].checked=true
+         this.checkedSize=this.checkedSize+1
+      }
+      let cp=0
+             for(let i = 0; i < this.numbers.length; i++){
+              if(this.numbers[i].checked ){
+                cp++
+              }
+            }
+              this.allChecked=(cp==this.numbers.length)
+    },
+    addAllNum:  function() {
+      if(this.allChecked){
+        this.allChecked=false
+        this.checkedSize = 0
+        for(let i = 0; i < this.numbers.length; i++){
+          this.numbers[i].checked =false
+        }
+      }
+      else {
+        this.allChecked=true
+        this.checkedSize = 0
+         for(let i = 0; i < this.numbers.length; i++){
+           if(!this.numbers[i].added){
+             this.numbers[i].checked =true
+             this.checkedSize++
+           }
+        }
+
+      }
+    },
+    removeAll:  function() {
+        this.allChecked=false
+        this.checkedSize = 0
+        for(let i = 0; i < this.numbers.length; i++){
+          this.numbers[i].added =false
+          this.numbers[i].checked =false
+        }
+    },
+    sendTime:function(param){
+      if(param=='later'){
+        this.sendNow=false
+        this.sendLater=true
+      }else{
+        this.sendNow=true
+        this.sendLater=false
+      }
+    },
+    sendMessages:function(){
+        let self = this
+      if(this.approved ){
+        this.parameters.numbers_list = []
+          for(let i = 0; i < this.numbers.length; i++){
+            if(this.numbers[i].added){
+              this.parameters.numbers_list.push(this.numbers[i].num)
+            }
+          }
+          if(this.parameters.numbers_list.length>0){
+            
+            axios({
+              url: "{{url('send_news_sms')}}",
+              method: 'post',
+              data: { numbers_list : this.parameters.numbers_list,
+                      sms_content:this.parameters.smsContent},
+              headers:{ useCredentails: true ,
+                        'Access-Control-Allow-Origin': '*'}})
+                    .then( (response)=> {
+                        if(response.data.data.invalidReceivers.length == 0){
+                           Swal.fire({
+                                      title: "Félicitation",
+                                      text:"Votre message a été envoyé à tous vos clients",
+                                      type: "success",
+                                      showCancelButton: false,
+                                      confirmButtonColor: "#3085d6",
+                                      cancelButtonColor: "#d33",
+                                      confirmButtonText: "OK  ",
+                                      cancelButtonText: "ANNULER",
+                                      allowOutsideClick: false,
+                                      }).then(result => {
+                                              this.allChecked=false
+                                              this.checkedSize = 0
+                                              for(let i = 0; i < this.numbers.length; i++){
+                                                this.numbers[i].added =false
+                                                this.numbers[i].checked =false
+                                              }
+                                      });
+                        }
+                        else{
+
+                          Swal.fire({
+                                      title: "Ops !!",
+                                      text:"Votre message n'a pass été envoyé à tous vos clients",
+                                      type: "warning",
+                                      showCancelButton: false,
+                                      confirmButtonColor: "#3085d6",
+                                      cancelButtonColor: "#d33",
+                                      confirmButtonText: "OK",
+                                      cancelButtonText: "ANNULER",
+                                      allowOutsideClick: false,
+                                      }).then(result => {
+                                              this.allChecked=false
+                                              this.checkedSize = 0
+                                              for(let i = 0; i < this.numbers.length; i++){
+                                                this.numbers[i].added =false
+                                                this.numbers[i].checked =false
+                                              }
+                                      });
+                        }
+                      })
+                      .catch(function (error) {
+                          if (error.response) {
+                            console.log(error.response.data);
+                            console.log(error.response.status);
+                            console.log(error.response.headers);
+                          }
+                        });
+            }
+             else{
+        Swal.fire({
+        title: "Liste vide",
+        text:"Merci de choisir au moins un numéro",
+        type: "warning",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "OK  ",
+        cancelButtonText: "ANNULER",
+        allowOutsideClick: false,
+        }).then(result => {
+
+        });
+      }
+        
+      }
+      else{
+        Swal.fire({
+        title: "Conditions d’utilisation",
+        text:"Merci d'accepter les conditions d'utilisation",
+        type: "warning",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "OK  ",
+        cancelButtonText: "ANNULER",
+        allowOutsideClick: false,
+        }).then(result => {
+
+        });
+      }
+    }
+  }
+});
+</script>
+{% endblock %}

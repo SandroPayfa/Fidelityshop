@@ -1,0 +1,230 @@
+{% extends 'base.html.twig' %}
+{% block title %}Inscription{% endblock %}
+{% block breadcrumb_items %}<li class="active">Inscription</li>{% endblock %}
+
+{% block body %}
+    <div class="container">
+		<div class="row justify-content-center align-items-center form_container" style="height:100vh">
+			<div class="card col-8">
+				<div class="card-body">
+					<h2 class="card-title">Inscription</h2>
+					
+					<div class="row">
+						{{ form_start(registrationForm, {'attr': {
+							'class': 'col-12',
+							}}) }}
+
+							
+							<div class="form-group">
+								{{ form_errors(registrationForm.tel) }}
+ 								{{ form_widget(registrationForm.tel, {'attr': {
+									'class': 'form-control',
+									'placeholder': 'Numéro de téléphone',
+									'onkeyup'    : "fieldEdit();",
+								}}) }}
+							</div>
+
+							<div class="form-group">
+								{{ form_errors(registrationForm.firstname) }}
+								{{ form_widget(registrationForm.firstname, {'attr': {
+									'class': 'form-control',
+									'placeholder': 'Prénom'
+								}}) }}
+
+								{{ form_errors(registrationForm.lastname) }}
+								{{ form_widget(registrationForm.lastname, {'attr': {
+									'class': 'form-control',
+									'placeholder': 'Nom'
+								}}) }}
+							</div>
+
+							<div class="form-group">
+								{{ form_errors(registrationForm.email) }}
+								{{ form_widget(registrationForm.email, {'attr': {
+									'class': 'form-control',
+									'placeholder': 'Adresse email'
+								}}) }}
+							</div>
+
+		
+
+							<div class="form-group">
+								{{ form_errors(registrationForm.city) }}
+								{{ form_widget(registrationForm.city, {'attr': {
+									'class': 'form-control',
+									'placeholder': 'Ville'
+								}}) }}
+
+								{{ form_errors(registrationForm.zip) }}
+								{{ form_widget(registrationForm.zip, {'attr': {
+									'class': 'form-control',
+									'placeholder': 'Code postal'
+								}}) }}
+							</div>
+
+							<div class="form-group">
+								{{ form_errors(registrationForm.plainPassword.first) }}
+								{{ form_widget(registrationForm.plainPassword.first, {'attr': {
+									'class': 'form-control',
+									'placeholder': 'Mot de passe'
+								}}) }}
+							</div>
+
+							<div class="form-group">
+								{{ form_errors(registrationForm.plainPassword.second) }}
+								{{ form_widget(registrationForm.plainPassword.second, {'attr': {
+									'class': 'form-control',
+									'placeholder': 'Confirmation du mot de passe'
+								}}) }}
+							</div>
+
+							<a href="{{ url('app_login') }}" class="btn btn-default">Connexion</a>
+							<button type="submit" id="sendlogin" class="btn btn-primary float-right">Inscription</button>
+						{{ form_end(registrationForm) }}
+					</div>
+				</div>
+			</div>
+		
+	</div>
+{% endblock %}
+
+
+{% block javascripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.33.1/sweetalert2.min.js"></script>
+<script>
+var Conditions='</br>'
+    + '<b>Déclaration de confidentialité</b> </br>'
+    + 'FidelityShop s’engage à préserver la confidentialité de vos données personnelles afin que vous puissiez continuer à nous les communiquer en tout confiance. Lorsque vous interagissez avec votre commerçant, vous communiquez de façon volontaire des informations personnelles qui leur permettent de vous identifier en tant que personne (ex. nom, prénom, numéro de téléphone, ville, code postale, e-mail, date d’anniversaire). </br>'
+    + 'Ces informations sont appelées des « données personnelles ». </br> '
+    + 'Toutes les données sont stockées et traitées dans le respect du RGPD. En bref, </br> '
+    + 'Nous en assurons la sécurité et la continuité des données. Nous ne transmettrons jamais ces informations à des sociétés tierces sans votre accord.</br>  '
+    + 'Les données que vous nous confiez restent votre propriété et vous avez le droit de les consulter, de les mettre à jour sur notre site internet FidelityShop.be dans votre espace client. La suppression est en revanche possible seulement quand plus aucune relation ne nous engage en regard des établissements (déductions, bons de réduction, facturations, …) </br> '
+    + 'En acceptant la présente déclaration de confidentialité, vous donnez votre consentement global pour tous les traitements décrits dans la présente déclaration de confidentialité pour lesquels un consentement est requis.</br>  '
+    + 'FidelityShop, notre système de fidélité s’efforce de protéger votre vie privée et vos données à caractère personnel. Si vous avez des questions sur la présente politique de confidentialité, n’hésitez pas à nous contacter à l’adresse privacy@fidelityshop.be </br> '
+    +'</br></br>'
+    + '<b>Qui est responsable du traitement de données ? </b></br>'
+    + 'L’établissement intervient en tant que responsable de traitement lors du traitement des données à caractère personnel dans le cadre de l’offre de services de FidelityShop, et ce, pour ce qui concerne les traitements que FidelityShop effectue sous sa propre responsabilité et autorité. Cela inclus Sécurité de l’information, support des clients et des utilisateurs en cas de demande.  </br>'
+    + 'FidelityShop agit en tant que sous-traitant pour les commerces utilisant la solution FidelityShop et est donc considéré comme responsable conjoint avec l’établissement.  </br>'
+    + 'Dans le cas d’annonces commerciales, de promotions, …. Il est de notre responsabilité d’assurer en service de qualité et transparent auprès des utilisateurs. </br>'
+    + 'L’utilisateur doit s’adresser à l’établissement dans le cas où il s’estime léser d’un point de vue des messages et des communications reçues, ou s’il à des questions en regard des promotions ou des points qui le concerne. </br>'
+    + 'L’utilisateur peut faire valoir ses droits (respect du RGPD) auprès de FidelityShop et auprès de l’établissement (afin de faire suivre l’information), dans le cadre de consultation, modifications, ou suppression de l’information qui le concerne. Il est possible de le faire soi-même depuis notre site internet via l’espace client sur www.fidelityshop.be  </br>'
+    + 'Responsable du traitement </br>'
+    + 'FidelityShop – Advensys SA </br>'
+    + 'Avenue Einstein 16, bâtiment P1 (3ème étage) </br>'
+    + 'Numéro d’entreprise : 0869.703.879 </br>'
+
+
+    +'</br></br>'
+
+
+    + '<b>Que faire en cas de modification ou réclamation ?  </b></br>'
+    + 'Allez directement sur notre site internet www.fidelityshop.be dans votre espace client avec votre numéro de téléphone ou e-mail et votre mot de passe.  </br>'
+    + 'Vous trouverez directement toute vos informations dans l’onglet « Réglages ». Vous pouvez y modifier vos informations personnelles à tout moment.  </br>'
+    + 'Il est également possible de choisir si vous souhaitez ou non être notifié des actions commerciales des établissements dans lequel vous y avez souscrit. (SMS, e-mails, notifications interne à votre espace client). </br>'
+    + 'Les modifications seront prises en compte et mis à jour en temps réel. </br>'
+    + 'Si vous ne souhaitez plus recevoir les messages du commerce en question, il vous suffit de répondre « STOP » aux messages publicitaires reçus par SMS afin d’être retiré de la liste des destinataires. </br>'
+    + 'Attention cependant, ne plus recevoir les messages à caractère publicitaire ne veut pas obligatoirement dire que vous ne recevrez plus jamais de message de la part du commerce. En effet, les messages relatifs à la carte de fidélité par SMS continueront d’être envoyés tant que la carte de fidélité est active </br>'
+    + 'Pour ne plus faire partie du programme de fidélisation, rendez-vous sur votre espace client dans l’onglet « réglages » en haut à droite « désactiver mon compte ». </br>'
+
+
+    +'</br></br>'
+
+    + '<b>Comment contacter FidelityShop en cas de question ?</b></br>'
+    + 'Horaires de bureau :</br>'
+    + 'De 9h à 12h30 et de 13h30 à 17h30 </br>'
+    + 'Numéro de téléphone : 0475/56.30.35</br>'
+    + 'En ligne : </br>'
+    + 'Adresse e-mail info@fidelityshop.be </br>'
+    + 'Site internet : www.fidelityshop.be </br>'
+
+    +'</br></br>'
+    +'<b>Qui reçoit mes données à caractère personnel ? </b></br>'
+    +'Les données à caractère personnel sont récoltées dans l’établissement du fait de l’utilisation du programme de fidélité FidelityShop. Il est possible que ces données soient traitées par différentes instances. En voici un aperçu : </br>'
+    +'FidelityShop / Advensys SA – la maison mère, dans un cadre de développement de support et de maintenance, l’établissement ayant souscrit à l’offre FidelityShop (il n’a pas accès qu’à ses propres données) Sous-traitant hébergeant les données (de façon sécurisées)</br>'
+
+
+
+    +'</br></br>'
+
+    +'<b>Des données anonymes sont-elles utilisées à des fins de reporting ?</b> </br>'
+    +'Il est possible que l’une des différentes instances énoncés ci-dessus utilise des données anonymes à des fins commerciales ou pour des rapports externes. Les données anonymes sont des données à caractère personnel qui sont anonymisées de telle manière qu’elles n’aient plus aucun rapport avec une personne identifiée ou identifiable ou que les données apparaissent d’une manière tellement anonyme que l’individu ne soit pas ou plus reconnaissable. </br>'
+
+    +'</br></br>'
+
+    +'<b>Combien de temps mes données sont-elles conservées ?</b> </br>'
+    +'Vos données personnelles seront conservées pendant la période minimum qui est nécessaire pour atteindre les buts spécifiés dans la présente Déclaration de confidentialité, à savoir 10 ans, sauf en cas de résolution de litiges ou si un délai de conservation plus long est légalement obligatoire. Les informations non personnelles peuvent être conservées sans limitation dans le temps à des fins statistiques. </br>'
+
+    +'</br></br>'
+
+    +'<b>Sécurisation et conservation des données </b></br>'
+    +'Nous reconnaissons que la sécurisation des données à caractère personnel fait partie de la protection des données. FidelityShop prend dès lors les mesures techniques et organisationnelles appropriées pour protéger les données à caractère personnel contre un traitement illicite ou un accès illicite afin d’éviter les abus. </br>'
+
+    +'</br></br>'
+
+    +'<b>Mises à jours</b></br>'
+    +'Si nous modifions la présente Déclaration de confidentialité, vous en serez informé via le site web</br>'
+
+    +'</br></br>';
+function fieldEdit(){
+	var el = document.getElementById("registration_form_tel");
+	var val = el.value.replace(/\s/g, "");
+	el.value=val;
+	//iti.setCountry(iti.getSelectedCountryData().iso2);
+}
+
+$('form').submit(function(e) { 
+     e.preventDefault();
+     e.returnValue = false;
+
+		 Swal.fire({
+        title: "Conditions d’utilisation",
+        type: "info",
+        html:
+        '</br>' +
+        'Les données collectées seront traitées uniquement par FidelityShop dans le but de vous offrir des avantages de fidélité par SMS et de vous informer dans le cadre du programme de fidélisation dans le commerce où vous êtes inscrit.</br>' +
+        'Vous avez le droit de consulter, de rectifier et d’effacer vos données via notre site web <a href="https://fidelityshop.be">FidelityShop.be</a> sur votre espace client.</br> '
+        + 'La déclaration de confidentialité est accessible sur <a href="https://pro.fidelityshop.be/politique-de-confidentialite/" target="_blank">Ce Lien</a>'
+        + '</br></br>'
+        + '<span style="display:none;" id="more">'
+        + 'FidelityShop s’engage à préserver la confidentialité de vos données personnelles afin que vous puissiez continuer à nous les communiquer en tout confiance. Lorsque vous interagissez avec votre commerçant, vous communiquez de façon volontaire des informations personnelles qui leur permettent de vous identifier en tant que personne (ex. nom, prénom, numéro de téléphone, ville, code postale, e-mail, date d’anniversaire). Ces informations sont appelées des « données personnelles ». '
+        + '</span> </br>'
+        + '<a style="cursor:pointer" onclick="Readmore()" id="myBtn">Lire La suite</a></br>'
+        + '<span id="dots">...</span>',
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "CONFIRMER ",
+        cancelButtonText: "ANNULER",
+        allowOutsideClick: false,
+    }).then(result => {
+			if(result.value){
+				$('form').off('submit');
+            $('form').submit();
+			}
+    });
+
+});
+
+
+function Readmore() {
+    Swal.fire({
+        title: "Conditions d’utilisation",
+        //text:"Si vous souhaitez continuer. Merci de vous inscrire en moins de 2min!",
+        type: "info",
+        //customClass : "more",
+        html:Conditions,
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "CONFIRMER ",
+        cancelButtonText: "ANNULER",
+        allowOutsideClick: false,
+    }).then(result => {
+			if(result.value){ 
+				$('form').off('submit');
+            $('form').submit();
+			}
+    });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,186 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ shop.name }}{% endblock %}
+
+
+{% if shop[0] is defined %}
+{% set shop = shop[0] %}
+
+{% block breadcrumb_items %}
+<li><a href="{{ url('shop') }}">Magasins</a></li>
+<li class="active">{{ shop.name }}</li>
+{% endblock %}
+
+{% block body_right %}
+{% if form_sent == true %}
+{% include 'toasts/settings_saved.html.twig' %}
+{% endif %}
+<div class="panel panel-default ">
+    <div class="panel-heading bg-light p-3">{{ shop.name }} </div>
+    <div class="panel-body col-lg-12 container-fluid row align-items-baseline ml-0">
+        <div class="card col-lg-6 ">
+            <div class="card-header">Informations complémentaires</div>
+            <div class="card-body">
+                <label><i class="fa fa-user icon"></i> Numéro de téléphone : <span>{{ shop.tel }}</span> </label><hr>
+
+                <label><i class="fa fa-user icon"></i> E-mail : <span >{{ shop.email }}</span> </label><hr>
+
+
+                <label><i class="fa fa-user icon"></i> Site web  : <a style="text-decoration:none" href="{{ shop.website }}" target="_blank">{{ shop.website }}</a> </label><hr>
+
+
+                <label><i class="fa fa-user icon"></i> Facebook : <a style="text-decoration:none" href="{{ shop.facebook }}" target="_blank">{{ shop.facebook }}</a> </label><hr>
+
+
+                <label><i class="fa fa-user icon"></i> Instgram : <a style="text-decoration:none" href="{{ shop.instagram }}" target="_blank">{{ shop.instagram }}</a> </label><hr>
+
+                <label><i class="fa fa-user icon"></i> Twitter : <a style="text-decoration:none" href="{{ shop.twitter }}" target="_blank">{{ shop.twitter }}</a> </label><hr>
+                <label><i class="fa fa-user icon"></i> Linkedin : <a style="text-decoration:none" href="{{ shop.linkdin }}" target="_blank">{{ shop.linkdin }}</a> </label><hr>
+
+
+            </div>
+        </div>
+        <div class="card col-lg-6 ">
+            <div class="card-header">Général</div>
+            <div class="card-body ">
+            <img src="{{asset('uploads/brochures/' ~ shop.image)}}" style="height:96px;width:96px" class="img-fluid" alt="Responsive image"><hr/>
+                <label><i class="fa fa-user icon"></i> Nom du mgasin : <span>{{ shop.name }}</span> </label><hr>
+
+                <label><i class="fa fa-user icon"></i> Adresse : <span>{{ shop.address }}</span> </label><hr>
+
+                <label><i class="fa fa-user icon"></i> Code postal : <span>{{ shop.zip }}</span> </label><hr>
+
+                <label><i class="fa fa-user icon"></i> Ville : <span>{{ shop.city }}</span> </label><hr>
+
+                <label><i class="fa fa-user icon"></i> Pays : <span>{{ shop.pays }}</span> </label><hr>
+            </div>
+        
+        </div>
+        <div class="card col-md-6">
+                <div class="card-header">Clés de licence et ID Terminal</div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Clé de licences</th>
+                                    <th>ID Terminal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for licence in shop.licences %}
+                                <tr>
+                                <td><span class=" text-center">{{ licence.serial }}</span></td>
+                                <td><span class=" text-center">ID{{ licence.terminalId }}</span></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+        </div>
+    <div class="panel-body col-lg-6 container-fluid row align-items-baseline ml-0">
+    </div>
+    <div class="panel-body container-fluid row align-items-baseline ml-0">
+        <div class="card col-lg-8 m-2">
+            <div class="card-header"><i class="fa fa-clock" aria-hidden="true"></i> Horaires du magasin</div>
+            <div class="card-body">
+            {% if day_horaires is not null %}
+                <table class="table" style="text-align:center;font-size:120%">
+                    <thead>
+                    <tr>
+                        <th>Jour</th>
+                        <th><i class="fa fa-sun"></i> Heure d'ouverture</th>
+                        <th><i class="fa fa-moon"></i> Heure de fermeture</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            Lundi
+                        </td>
+                        <td>
+                            <label><span>{{ day_horaires[0].o_h }} : 00</span> </label>
+                        </td>
+                        <td>
+                            <label><span>{{ day_horaires[0].c_h }} : 00</span> </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Mardi
+                        </td>
+                        <td>
+                            <label><span>{{ day_horaires[1].o_h }} : 00</span> </label>
+                        </td>
+                        <td>
+                            <label><span>{{ day_horaires[1].c_h }} : 00</span> </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Mercredi
+                        </td>
+                        <td>
+                            <label><span>{{ day_horaires[2].o_h }} : 00</span> </label>
+                        </td>
+                        <td>
+                            <label><span>{{ day_horaires[2].c_h }} : 00</span> </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Jeudi
+                        </td>
+                        <td>
+                            <label><span>{{ day_horaires[3].o_h }} : 00</span> </label>
+                        </td>
+                        <td>
+                            <label><span>{{ day_horaires[3].c_h }} : 00</span> </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Vendredi
+                        </td>
+                        <td>
+                            <label><span>{{ day_horaires[4].o_h }} : 00</span> </label>
+                        </td>
+                        <td>
+                            <label><span>{{ day_horaires[4].c_h }} : 00</span> </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Samedi
+                        </td>
+                        <td>
+                            <label><span>{{ day_horaires[5].o_h }} : 00</span> </label>
+                        </td>
+                        <td>
+                            <label><span>{{ day_horaires[5].c_h }} : 00</span> </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Dimanche
+                        </td>
+                        <td>
+                            <label><span>{{ day_horaires[6].o_h }} : 00</span> </label>
+                        </td>
+                        <td>
+                            <label><span>{{ day_horaires[6].c_h }} : 00</span> </label>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            {% endif %}
+
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+
+{% endblock %}
+{% endif %}

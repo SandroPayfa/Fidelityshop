@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Actualités{% endblock %}
+{% block breadcrumb_items %}
+<li class="active">Actualités</li>{% endblock %}
+
+{% block body_right %}
+
+
+<div class="container-fluid" style="font-size:80% ! important">
+    <div id="InterfaceLowToLoad">
+        <i class="material-icons d-block text-danger" style="font-size:50px">report</i>
+        Votre appareil ne peut pas supporter <br>
+        Veuillez utiliser une tablette ou un ordinateur
+    </div>
+    <div class="row" id="app-vue">
+        <div class="col-12 mb-4">
+            <div class="card card-small">
+                <div class="card-header border-bottom">
+                    <div class="row ">
+                        <div class="col-6">
+                             <a href="{{ url('news_mail') }}" ><img style="height:380px" class="img-fluid" alt="Image mailing" src="{{ asset('assets/img/mail.png') }}"/></a>
+                            <div class="container">
+                              <div class="row mt-3">
+                                  <div class=" col-sm-0 col-md-2 col-lg-3">
+                                  </div>
+                                  <div class=" col-sm-12 col-md-8 col-lg-6">
+                                      <a href="{{ url('news_mail') }}" class="btn btn-primary"><i class="fas fa-envelope-open-text"></i> Envoie d'e-mailing</a>
+                                  </div>
+                                  <div class=" col-sm-0 col-md-2 col-lg-3">
+                                  </div>
+                              </div>
+                            </div>
+                        </div>
+                        <div class="col-6 ">
+                           <a href="{{ url('news_sms') }}" ><img style="height:380px" class="img-fluid" alt="Image SMS" src="{{ asset('assets/img/sms.png') }}"/></a>
+                            <div class="container">
+                              <div class="row mt-3">
+                                  <div class=" col-sm-0 col-md-2 col-lg-3">
+                                  </div>
+                                  <div class=" col-sm-12 col-md-8 col-lg-6">
+                                      <a href="{{ url('news_sms') }}" class="btn btn-primary"><i class="fas fa-sms"></i> Envoie de SMS</a>
+                                  </div>
+                                  <div class=" col-sm-0 col-md-2 col-lg-3">
+                                  </div>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

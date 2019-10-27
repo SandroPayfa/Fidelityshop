@@ -1,0 +1,168 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Transactions{% endblock %}
+{% block breadcrumb_items %}
+	{% if my != true %}
+		<li class="active">Transactions</li>
+	{% else %}
+		<li><a href="{{ url('transactions') }}">Transactions</a></li>
+		<li class="active">Mes transactions</li>
+	{% endif %}
+{% endblock %}
+
+{% block body_right %}
+<div id="filterCont" style="display:none; position:fixed !important;top: 60px;left: 0; z-index:999999999999999999999999 !important;height:100vh;width:100%;background-color:#273e50 "> 
+<div class="container-fluid">
+<div class="row" style="text-align:center;padding-top:10px;padding-bottom:10px;color:#fff;background-color:#000 ">
+<div class="col-md-2" style="color:#f00;cursor:pointer" onClick="toggleFilter()">ANNULER</div>
+<div class="col-md-8">Séléctionnez les dates</div>
+<div style="cursor:pointer" class="col-md-2"><a id="filterok" onClick="filterRange();">OK</a></div>
+</div>
+<div class="row mt-5" style="text-align:center;padding-top:10px;padding-bottom:10px;color:#fff; ">
+<div class="col-md-4 col-lg-4 col-sm-12" >
+
+						<div class="form-group">
+                <div class='input-group card text-white bg-info mb-3 date' id='datetimepicker1' style="max-width: 18rem;">
+                    <input type='hidden' id="date_from" class="form-control" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+
+</div>
+<div class="col-md-4">
+						<div class=" form-group">
+                <div class='input-group card text-white bg-info mb-3 date' id='datetimepicker2' style="max-width: 18rem;">
+                    <input type='hidden' id="date_to" class="form-control" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+</div>
+<div class="col-md-3 ">
+<div id="filterGroup" class="card text-white bg-white mb-3 text-center">	
+    <p class="m-1 filter" ><a href="{{ url('transactions') }}?periode=today">Aujourd'hui</a></p>
+  	<hr class="m-0" />
+	  <p class="m-1 filter"><a href="{{ url('transactions') }}?periode=yesterday">Hier</a></p>
+  	<hr class="m-0" />
+	  <p class="m-1 filter"><a href="{{ url('transactions') }}?periode=last_week">7 Derniers jours</a></p>
+  	<hr class="m-0" />
+	  <p class="m-1 filter"><a href="{{ url('transactions') }}?periode=last_month">30 Derniers Jours</a></p>
+  	<hr class="m-0" />
+	  <p class="m-1 filter"><a href="{{ url('transactions') }}?periode=current_month">Mois en cours</a></p>
+  	<hr class="m-0" />
+	  <p class="m-1 filter"><a href="{{ url('transactions') }}?periode=prev_month">Mois -1</a></p>
+  	<hr class="m-0" />
+	   <p class="m-1 filter"><a href="{{ url('transactions') }}?periode=current_year">Année en cours</a></p>
+  	<hr class="m-0" />
+	  <p class="m-1 filter"><a href="{{ url('transactions') }}?periode=prev_year">Année -1</a></p>
+  	<hr class="m-0" />
+</div>
+</div>
+</div>
+</div>
+</div>
+	<div class="panel panel-default table_wrapper">
+		<div class="panel-heading">
+			{% if my == false %}Toutes les transactions{% else %}Mes transactions{% endif %}
+			{% if 'ROLE_VENDOR' in app.user.roles or 'ROLE_ADMIN' or 'ROLE_REVENDEUR' in app.user.roles %}
+				{% if my == false %}
+					<a href="{{ url('my_transactions') }}" class="btn btn-sm btn-primary float-right">Mes transactions</a>
+				{% else %}
+					<a href="{{ url('transactions') }}" class="btn btn-sm btn-primary float-right">Toutes les transactions</a>
+				{% endif %}
+			{% endif %}
+		</div>
+		<div class="panel-body">
+			
+			<table id="table"   data-toggle="table" data-sort-name="id" data-sort-order="desc"  class="table table-stripper" >
+				<thead>
+					<tr>
+						<th data-field="id"  >#</th>
+						<th data-field="amount"  >Montant</th>
+						<th data-field="points"  >Points cumulés</th>
+						{% if 'ROLE_VENDOR' in app.user.roles or 'ROLE_ADMIN'  in app.user.roles %}<th>Client</th>{% endif %}
+						<th data-field="magasin" >Magasin</th>
+						<th data-field="date"  >Date & Heure de transactions</th>
+					</tr>
+				</thead>
+				<tbody> 
+					{% for tr in transactions  %}
+					
+						{% if tr.type=='used' %}
+						{% if 'ROLE_VENDOR' in app.user.roles or 'ROLE_ADMIN' in app.user.roles %}
+							<tr class="used_vendor" >
+							<td>{{ tr.id }}</td>
+							<td>Montant Offert</td>
+							<td class="used_amount">{{ tr.amount }} €</td>
+						{% else %}
+							<tr class="used_customer" >
+							<td>{{ tr.id }}</td>
+							<td>Montant Offert</td>
+							<td class="used_amount">{{ tr.amount }} €</td>
+						{% endif %}
+						
+					{% else %}
+					<tr>
+					<td>{{ tr.id }}</td>
+							<td>{{ tr.amount }} €</td>
+							<td>{{ tr.points|default(0) }} Pts</td>
+					{% endif %}
+							{% if 'ROLE_VENDOR' in app.user.roles or 'ROLE_ADMIN' in app.user.roles %}
+								<td>
+								
+									{% if tr.userid[0].username is defined and tr.userid[0].id is defined %}
+										<a {% if tr.type=='used' %} style="color:#fff;" {% endif %} href="{{ url('user', {"id": tr.userid[0].id}) }}">
+											{% if tr.userid[0].firstname != '' and tr.userid[0].lastname != '' %}
+												{{ tr.userid[0].firstname }} {{ tr.userid[0].lastname }}
+											{% else %}
+												Profile {{tr.userid[0].id}}
+											{% endif %}
+											
+										</a>
+
+									{% endif %}
+								</td>
+							{% endif %}
+							<td>
+								{% if tr.shop is defined %}
+									<a {% if tr.type=='used' %} style="color:#fff;" {% endif %} href="{{ url('single_shop', {"id": tr.shop.id}) }}">{{ tr.shop.name }}</a>
+								{% endif %}
+							</td>
+							<td>Le {{ tr.date|date('d/m/Y à H\\hi:s') }}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.33.1/sweetalert2.min.js"></script>
+<script type="text/javascript">
+
+let filter = false;
+
+
+function filterRange(){
+	let from =$("#date_from").val();
+	let to =$("#date_to").val();
+
+	window.location =(to!=from) ? '{{ url('transactions') }}?from='+from+'&to='+to : '{{ url('transactions') }}'
+}
+
+
+
+function toggleFilter(){
+	this.filter=!this.filter
+	$("#filterCont").toggle()
+}
+    setInterval(function () { 
+	  //	if(!this.filter)
+   //   location.reload();
+    }, 10000);
+</script>
+
+{% endblock %}

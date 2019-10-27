@@ -1,0 +1,13 @@
+swiftmailer:
+    transport:        mail
+    username:         dev@spbusiness.eu
+    password:         g6jAUM4u5
+    host:             SSL0.OVH.NET
+    port:             465
+    timeout:           60
+    encryption:       ssl
+    auth_mode:        login
+    spool: { type: 'memory' }
+    disable_delivery: false
+    url: '%env(MAILER_URL)%'
+    # simple

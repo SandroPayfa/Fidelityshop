@@ -1,0 +1,150 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Licences{% endblock %}
+{% block breadcrumb_items %}<li class="active">Licences</li>{% endblock %}
+
+{% block body_right %}
+
+	<div class="panel panel-default table_wrapper">
+		<div class="panel-heading">Licences <span class="badge badge-primary">{{ licences|length }}</span>
+		<a href="{{ url('new_licence') }}" class="btn btn-sm btn-primary float-right">Ajouter Licence</a>
+
+
+		</div>
+		<div class="panel-body">
+			<table class="table table-striped text-center">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Clé de licence</th>
+						<th>Magasin associé</th>
+						<th>Terminal</th>
+						<th>Periode</th>
+						<th>Date d'activation</th>
+						<th>Expiration</th>
+						<th>
+							Renouveler
+						</th>
+						<!--th>Code pin</th-->
+						<th>Etat</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for licence in licences %}
+						<tr>
+							<th>{{ licence.id }}</th>
+							<th>{{ licence.serial }}</th>
+							<th><a href="{{ url('single_shop', {'id': licence.shop.id}) }}">{{ licence.shop.name }}</a></th>
+							<th>ID{{ licence.terminalId }}</th>
+							<th>{{licence.periode}} Mois</th>	
+							
+							<th>{% if licence.actived == 1 %}<h6> {{licence.activatedAt|date('d/m/Y')}} </h6>
+							{% endif %}
+							</th>			
+							<th>
+							{# endDate and startDate are strings or DateTime objects #}
+							<h6>
+							{%  if licence.expiredAt is not null %}
+								{% if expired[licence.id] < -1  %}
+									<span class="label label-danger" style="color:#fff;padding:5px;border-radius:5px">
+									Expire le {{licence.expiredAt|date('d/m/Y')}}
+									
+								{% elseif expired[licence.id] <=7 and expired[licence.id] >= -1 %}
+									<span class="label label-warning" style="color:#fff;padding:5px;border-radius:5px">
+							    	{{licence.expiredAt|date('d/m/Y')}}
+								{% else %}
+									<span class="label label-success" style="color:#fff;padding:5px;border-radius:5px">
+							    	{{licence.expiredAt|date('d/m/Y')}}
+								{% endif %}
+							{% else %}
+								<span class="label label-default" style="color:#fff;padding:5px;border-radius:5px">
+								 n'est pas encore activé
+							{% endif %}
+							</span>
+							</h6>
+							</th>
+							<th>
+							{% if expired[licence.id] < -1  %}
+							<i class="fa fa-sync" onclick="renew({{licence.id}});" style="color:#76FF03;font-size:130%;cursor:pointer"></i>
+							{% endif %}
+							</th>
+							<!--th>{{ licence.pin }}</th-->
+							<th>
+							<a href="{{ url('change_status', {'licence': licence.id}) }}">
+							{% if licence.actived %}
+							<i class="fa fa-circle" style="color:#76ff03;font-size:130%"></i>
+							{% else %}
+							<i class="fa fa-circle" style="color:#d50000;font-size:130%"></i>
+							{% endif %}
+							</th>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+{% endblock %}
+
+{% block javascripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.33.1/sweetalert2.min.js"></script>
+<script>
+
+
+var renew_ ="{{renew}}";
+
+
+if(renew_){
+	Swal.fire({
+        title: "Félécitation",
+        type: "success",
+		text: "la licence a été renouvelé par succès",
+        showCancelButton: false, 
+        confirmButtonColor: "#30a5ff",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Continuer",
+        cancelButtonText: "ANNULER",
+        allowOutsideClick: false,
+    }).then(result => {
+    });
+}
+
+
+function renew(licence_id){
+	Swal.fire({
+        type: "info",
+        html:
+		'<div class="col-md-12 col-sm-12">'+
+         '   <div class="card">'+
+          '      <div class="card-body">'+
+           '         <h2 class="card-title">Renouveler Licence</h2>'+
+            '             <form action="https://fidelityshop.be/connexion/public/licences" method="post">'+
+             '           <input type="hidden" name="_csrf_token" value="nEp3mNI7H9r-zkFgnIr2xO9e4QmXgTRHRtJDFOexZPs">'+
+			  '           <input type="hidden" value="'+licence_id+'" name="licence_id" value="nEp3mNI7H9r-zkFgnIr2xO9e4QmXgTRHRtJDFOexZPs">'+
+              '          <div class="input-group">'+
+		'					<div class="input-group-prepend">'+
+		' <span class="input-group-text" id="date_debut">Date Debut</span>'+
+                '</div><input type="date" name="date_debut" required>'+
+		'				</div>'+
+         '               <div class="input-group">'+
+		'					<div class="input-group-prepend">'+
+		' <span class="input-group-text" id="date_fin">Date fin</span>'+
+                '</div><input type="date" name="date_fin" required>'+
+		'				</div>'+
+         '               <button type="submit" id="sendlogin" class="btn btn-primary float-right">Renouveler</button>'+
+          '          </form>'+
+           '     </div>'+
+            '</div>'+
+        '</div>',
+        showCancelButton: false,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "ANNULER ",
+        cancelButtonText: "ANNULER",
+        allowOutsideClick: false,
+    }).then(result => {
+    });
+}
+
+</script>
+{% endblock %}

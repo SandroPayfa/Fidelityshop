@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Licences{% endblock %}
+{% block breadcrumb_items %}<li class="active">Licences</li>{% endblock %}
+
+{% block body_right %}
+
+	<div class="panel panel-default table_wrapper">
+		<div class="panel-heading"> <h3 class="card-title">Ajouter une licence <a href="{{ url('licences') }}" class="btn btn-sm btn-primary float-right">Toutes les Licences</a></h3>
+		
+
+		</div>
+		<div class="panel-body">
+		
+			
+					<div class="row">
+						{{ form_start(addlicenceForm, {'attr': {
+							'class': 'col-12',
+							
+									"enctype":"multipart/form-data"
+							}}) }}
+
+				
+			<h6 class="card-title">Sélectionnez le magasin</h6>
+
+							<div class="form-group">
+								{#{form_errors(addlicenceForm.magasin) }#}
+ 								{{ form_widget(addlicenceForm.magasin, 
+								 {'attr': {
+									'class': 'form-control',
+									'required': '',
+								}}) }}
+							</div>
+
+			<h6 class="card-title">Choissisez la période de validité</h6>
+
+
+							<div class="form-group">
+								{{ form_errors(addlicenceForm.periode) }}
+ 								{{ form_widget(addlicenceForm.periode, {'attr': {
+									'class': 'form-control',
+									
+								}}) }}
+							</div>
+						
+						
+					</div>
+
+<h6 class="card-title">Choissisez le type de licence</h6>
+
+
+							<div class="form-group">
+								{{ form_errors(addlicenceForm.type) }}
+ 								{{ form_widget(addlicenceForm.type, {'attr': {
+									'class': 'form-control',
+								}}) }}
+							</div>
+
+							
+
+						
+						
+					</div>
+
+
+		<div class="panel panel-default table_wrapper">
+		<a href="{{ url('licences') }}" class="btn btn-sm btn-primary float-right">Retour</a>
+							<button type="submit"  class="btn btn-primary float-left">Ajouter</button>
+						{{ form_end(addlicenceForm) }}
+
+		</div>
+
+
+		</div>
+	</div>
+
+{% endblock %}

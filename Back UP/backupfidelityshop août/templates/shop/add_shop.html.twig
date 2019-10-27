@@ -1,0 +1,144 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commerçant{% endblock %}
+
+
+{% if shop[0] is defined %}
+{% set shop = shop[0] %}
+
+{% block breadcrumb_items %}
+<li><a href="{{ url('shop') }}">Magasins Commercant</a></li>
+<li class="active">Ajouter Magasin</li>
+{% endblock %}
+
+{% block body_right %}
+ <div class="panel panel-default table_wrapper">  
+<div class="col-md-6">
+                <div class="card col-md-12 ">
+                    <div class="card-header">Informations sur votre magasin</div>
+                    <FONT face="Verdana" color="#FF0000" size="1"><b>Les informations seront visible pour vos clients</b></FONT>
+                    <div class="card-body">
+                        {{ form_start(edit_shop_form, {'attr': {'class': ''}}) }}
+                        <ul class="list-group list-group-flush">
+
+                            <li class="list-group-item">
+                                {{ form_errors(edit_shop_form.image) }}
+                                <div class="input-group" title="Nom du magasin">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa fa-image"></i></span>
+                                    </div>
+                                    
+                                    <img src="{{asset('uploads/brochures/' ~ shop.image)}}" style="height:56px;width:56px" class="img-fluid" alt="Responsive image">
+                                    {{ form_widget(edit_shop_form.image, {'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': "Nom du magasin",
+                                    }}) }}
+                                </div>
+                            </li>
+
+                            <li class="list-group-item">
+                                {{ form_errors(edit_shop_form.name) }}
+                                <div class="input-group" title="Nom du magasin">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa fa-user"></i></span>
+                                    </div>
+                                    {{ form_widget(edit_shop_form.name, {'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': "Nom du magasin",
+                                    }}) }}
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                {{ form_errors(edit_shop_form.address) }}
+                                <div class="input-group" title="Adresse">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa fa-map-marker-alt"></i></span>
+                                    </div>
+                                    {{ form_widget(edit_shop_form.address, {'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': "Adresse",
+                                    }}) }}
+                                </div>
+                            </li>
+                            {{ form_errors(edit_shop_form.zip) }}
+                            {{ form_errors(edit_shop_form.city) }}
+                            <li class="list-group-item">
+                                <div class="input-group" title="Adresse">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa fa-map-pin"></i></span>
+                                    </div>
+                                    {{ form_widget(edit_shop_form.zip, {'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': "Code postal",
+                                    }}) }}
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="input-group" title="Adresse">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-city"></i></span>
+                                    </div>
+                                    {{ form_widget(edit_shop_form.city, {'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': "Ville",
+                                    }}) }}
+                                </div>
+                            </li>
+                          <li class="list-group-item">
+                                <div class="input-group" title="Adresse">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa fa-flag"></i></span>
+                                    </div>
+                                    {{ form_widget(edit_shop_form.pays, {'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': "Pays",
+                                    }}) }}
+                                </div>
+                            </li>
+                            {% if 'ROLE_ADMIN' in app.user.roles %}
+                            <li class="list-group-item">
+                                <div class="input-group" title="Adresse">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon3">Commerçant</span>
+                                    </div>
+                                    <select class="form-control custom-select" id="add_shop_form_user_id_id" name="user_id">
+                                    {% for vendor in vendors %}
+                                    <option {% if vendor.id == current_vendor.id %}selected{% endif %} value="{{vendor.id}}">{{vendor.firstname}} {{vendor.lastname}}</option>
+                                    {% endfor %}
+                                    </select>
+                                </div>
+                            </li>
+                            {% endif %}
+                            <li class="list-group-item">
+                            <br><button type="submit" class="btn btn-sm float-right btn-primary">Enregistrer</button>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+                            </li>
+                            {% if 'ROLE_ADMIN' in app.user.roles %}
+                            <li class="list-group-item">
+                                <div class="input-group" title="Adresse">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon3">Commerçant</span>
+                                    </div>
+                                    <select class="form-control custom-select" id="add_shop_form_user_id_id" name="user_id">
+                                    {% for vendor in vendors %}
+                                    <option value="{{vendor.id}}">{{vendor.firstname}} {{vendor.lastname}}</option>
+                                    {% endfor %}
+                                    </select>
+                                </div>
+                            </li>
+                            {% endif %}
+                            <li class="list-group-item">
+                                <br><button type="submit" class="btn btn-sm float-right btn-primary">Continuer</button>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+</div>
+{% endblock %}
+{% endif %}

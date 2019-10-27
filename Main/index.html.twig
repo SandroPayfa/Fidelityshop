@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body_right %}
+	<div class="panel panel-container stats_wrapper">
+		<div class="col-xs-6 col-md-4 col-lg-4 card">
+			<i class="fas fa-3x fa-money-bill-wave-alt color-blue"></i>
+			<div class="title large">30</div>
+			<div class="subtitle text-muted">points cumulés</div>
+		</div>
+		<div class="col-xs-6 col-md-4 col-lg-4 card">
+			<i class="fas fa-3x fa-shopping-basket color-orange"></i>
+			<div class="title large">0</div>
+			<div class="subtitle text-muted">transactions aujourd'hui</div>
+		</div>
+		<div class="col-xs-6 col-md-4 col-lg-4 card">
+			<i class="fas fa-3x fa-user color-teal"></i>
+			<div class="title large">{% if nb_customers is defined %}{{ nb_customers }}{% endif %}</div>
+			<div class="subtitle text-muted">adhérents</div>
+		</div>
+	</div>
+
+	<div class="panel panel-default table_wrapper">
+		<div class="panel-heading">Transactions du jour</div>
+		<div class="panel-body">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Montant</th>
+						<th>Nombre de points</th>
+						<th>Client</th>
+						<th>Heure</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for transaction in app.user.transactions %}
+						{{ dump(transaction) }}
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+{% endblock %}
+
+{% block refresh %}
+
+<script type="text/javascript">
+    setTimeout(function () { 
+      location.reload();
+    }, 10000);
+</script>
+
+{% endblock %}

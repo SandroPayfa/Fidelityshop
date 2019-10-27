@@ -1,0 +1,73 @@
+{% extends 'main/base.html.twig' %}
+
+{% block stats_cards %}
+	<div class="col-xs-6 col-md-6 col-lg-3 card">
+		<i class="fas fa-3x fa-money-bill-wave-alt color-blue"></i>
+		<div class="title large">{{ nb_points }}</div>
+		<div class="subtitle text-muted">Points cumulés par vos clients</div>
+	</div>
+	<div class="col-xs-6 col-md-6 col-lg-3 card">
+		<i class="fas fa-3x fa-exchange-alt color-orange"></i>
+		<div class="title large">{{ transactions|length }}</div>
+		<div class="subtitle text-muted">Transaction{% if transactions|length > 1 %}s{% endif %} aujourd'hui</div>
+	</div>
+	<div class="col-xs-6 col-md-6 col-lg-3 card">
+		<i class="fas fa-3x fa-user color-teal"></i>
+		<div class="title large">{{ nb_customers }}</div>
+		<div class="subtitle text-muted">Client{% if customers|length > 1 %}s{% endif %}</div>
+	</div>
+	<div class="col-xs-6 col-md-6 col-lg-3 card">
+		<i class="fas fa-3x fa-shopping-basket color-orange"></i>
+		<div class="title large">{{ nb_shops }}</div>
+		<div class="subtitle text-muted">Magasin{% if nb_shops > 1 %}s{% endif %}</div>
+	</div>
+{% endblock %}
+
+{% block panel_title %}Transactions du jour <span class="badge badge-primary">{{ transactions|length }}</span>{% endblock %}
+
+{% block table_header %}
+	<th>#</th>
+	<th>Montant</th>
+	<th>Points cumulés</th>
+	<th>Magasin</th>
+	<th>Client</th>
+	<th>Numéro</th>
+	<th>Date & Heure de transactions</th>
+{% endblock %}
+
+
+{% block table_body %}
+	{% for transaction in transactions %}
+			{% if transaction.type=='used' %}
+						<tr style="background-color:#ffa000;color:#fff;" >
+						<th>{{ transaction.id }}</th>
+							<td>Montant Offert</td>
+							<td style="color:#d50000;font-weight:bolder" >{{ transaction.amount }} €</td>
+					{% else %}
+					<tr>
+					<th>{{ transaction.id }}</th>
+							<td>{{ transaction.amount }} €</td>
+							<td>{{ transaction.points|default(0) }} Pts</td>
+					{% endif %}
+			<td><a {% if transaction.type=='used' %} style="color:#fff;" {% endif %} href="{{ url('single_shop', {'id': transaction.shop.id}) }}">{{ transaction.shop.name }}</a></td>
+			<td>
+				{% for usr in transaction.userId %}
+					<a {% if transaction.type=='used' %} style="color:#fff;" {% endif %} href="{{ url('user', {'id': usr.id}) }}">
+									{% if usr.firstname != '' and usr.lastname != '' %}
+									{{ usr.firstname }} {{ usr.lastname }}
+									{% else %}
+									Profile {{usr.id}}
+									{% endif %}
+									</a>
+				{% endfor %}
+			</td>
+			<td>
+				{% for usr in transaction.userId %}
+					<a {% if transaction.type=='used' %} style="color:#fff;" {% endif %} href="{{ url('user', {'id': usr.id}) }}">{{ usr.tel }}</a>
+				{% endfor %}
+			</td>
+			<td>{{ transaction.date|date('d/m/Y à H\\hi:s') }}</td>
+		</tr>
+	{% endfor %}
+{% endblock %}
+

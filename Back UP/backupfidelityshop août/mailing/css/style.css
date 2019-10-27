@@ -1,0 +1,220 @@
+body{
+    display: block; 
+    margin: 10px auto !important;
+}
+#InterfaceLowToLoad{display: none;}
+.item-zoo-mak{
+    display: block;
+    padding: 0 5px;
+    margin: 0;
+}
+.item-zoo-mak li{
+    list-style: none;
+    display: inline-block;
+    width: 49%;
+    cursor: pointer;
+    text-align: center;
+    padding: 0
+}
+.item-zoo-mak li a{
+    padding: 8px    0px;
+    display: block;
+}
+.item-zoo-mak li:hover{
+    text-decoration: none;
+    border-color: #007bff;
+}
+.itm_g{
+    color : #6b6b6b;
+}
+.itm_g i{display: none}
+
+.item-zoo-mak li:hover > a{
+    text-decoration: none;
+    background-color : #007bff;
+    color : #fff
+}
+.item_on-g{
+    background-color : #447db9;
+    color : #fff
+}
+.content-mail-web{
+    height: 650px;
+    overflow-y: scroll;
+}
+#zoneTemplate{
+    background: #ececec;
+    overflow-y:scroll;
+}
+.btn_select_layout{
+    height: 100px;
+    width: 100px;
+    display: inline-block;
+    padding: 0;
+    text-align: center;
+    margin:5px;
+    cursor: pointer;
+}
+.btn_select_layout i{font-size: 40px;margin-top: 10px}
+.btn_select_layout span{font-size: 12px;font-weight:bold}
+.layout_select{
+    height: 100px;
+    background: #f1f1f1;
+    margin-top: 2px;
+    position: relative;
+    cursor: pointer;
+}
+.layout_select button{
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    font-size: 8px;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: none;
+}
+.layout_select:hover > button{
+    display: inline-block
+}
+#zoneTemplate div,#zoneTemplate h1,#zoneTemplate h2,#zoneTemplate h3,#zoneTemplate h4,#zoneTemplate p,#zoneTemplate span,#zoneTemplate th{
+    outline: none;
+    margin: 0;
+}
+#zoneTemplate th{
+    padding: 5px;
+}
+.select_effet hr{
+    cursor: crosshair;
+}
+.select_effet:focus{border : 1px solid #ffa96f}
+.select_effet-2:focus{border : 1px solid #cfcfcf}
+.tablea-gestion{display: none;}
+#content{display: block}
+.style_btn{
+    display: inline-block;
+    border : 1px solid #4e4e4e;
+    padding: 6px;
+    height: 35px;
+    color: #4e4e4e
+}
+.categori_style,.categori_style_,.categori_style__{
+    display: none;
+}
+.file_piece{
+    display: inline-block;
+    cursor: pointer;
+    margin: 10px auto;
+    position: relative;
+    overflow: hidden;
+}
+.file_piece span{
+    display: block;
+    text-align: center;
+    font-size: 12px;
+    cursor: pointer;
+}
+.file_piece input{
+    position: absolute;
+    top:0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    cursor: pointer;
+    opacity: 0;
+    z-index: 2;
+}
+#wait_operation_back,#wait_operation{
+    position: fixed;
+    display: none;
+    
+}
+#wait_operation_back{
+    background: #000;
+    opacity: 0.5;
+    z-index: 1001;
+    top : 0; left : 0;
+    width: 100%;
+    height: 100%;
+}
+#wait_operation{
+    background: #ffffff;
+    z-index: 1002;
+    width: 310px;
+    min-height: 100px;
+    top : 0;left: 0;
+    overflow: hidden;
+    box-shadow: 0 0 6px #000000;
+    border-radius: 5px;
+    overflow-x: hidden;
+}
+#wait_operation .text_option{
+    display: block;
+    padding: 38px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color : #505559;
+}
+#wait_operation .text_option::before,.small_valid_icone::before{
+    content: url(../icon/wait.apng);
+    width: 100px;
+    height: 100px;
+    display: block;
+    margin-top: -38px;
+    margin-right: 5px;
+    float: left;
+}
+#wait_operation .echec_operation::before{
+    content: url(../icon/failed.png);
+}
+#wait_operation .echec_operation{
+    color : #fb0000
+}
+#wait_operation .valid_operation::before{
+    content: url(../icon/valid.svg);
+}
+#wait_operation .valid_operation{
+    color : #44b78b
+}
+#destinataires-champ{
+    position: relative;
+    border : 1px solid #e1e5eb;
+    background: #ffffff;
+    cursor: text;
+}
+#info-dst{
+    display: inline-block
+}
+#destinataires-champ input{
+    width:200px;
+    padding:.8125rem .8125rem;
+    font-size: .875rem;
+    line-height: 1.5;
+    border-radius: .375rem;
+}
+#listEmail,#destinataires-champ{
+    height: 300px;
+    padding: 2px;
+    overflow: hidden;
+}
+#listeEmail{
+    height: 200px;
+    overflow-y: scroll;
+    overflow-x: hidden
+}
+.everyEmail input,.everyEmail label{
+    cursor: pointer;
+}
+@media screen and (max-width:780px){
+    .item-zoo-mak li{width: 48%}
+    .itm_g span{display: none !important}
+    .itm_g i{display: block};
+    
+}
+@media screen and (max-width:749px){
+    #EditeEmailZoneParent{display: none}
+    #InterfaceLowToLoad{
+        display: block;
+        text-align: center;
+        padding-top: 50%
+    }
+}

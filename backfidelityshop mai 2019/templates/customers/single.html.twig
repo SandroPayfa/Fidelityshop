@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Utilisateurs{% endblock %}
+{% block breadcrumb_items %}
+	{% if is_current_user == true %}
+		<li class="active">{{ user.username }}</li>
+	{% else %}
+		<li><a href="{{ url('customers') }}">Clients</a></li>
+		<li class="active">{{ user.username }}</li>
+	{% endif %}
+{% endblock %}
+
+{% if user is defined %}
+
+	{% block body_right %}
+		<div class="panel panel-default table_wrapper">
+			<div class="panel-heading">
+				{% if is_current_user == true %}
+					{{ user.username }}
+				{% else %}
+					Client - {{ user.firstname }} {{ user.lastname }} 
+				{% endif %}
+				
+<!-- Nombre de points restant
+					-->
+		<a href="{{ url('customers') }}" class="btn btn-sm btn-primary float-right">Tout mes clients</a>
+
+
+
+			</div>
+
+
+			<div class="panel-body row">
+
+				<div class="card col-md-3 p-0 m-3">
+					<div class="card-header">Informations sur votre client</div>
+					<div class="card-content">
+						<ul class="list-group list-group-flush">
+							<li class="list-group-item">ID : {{ user.id }}</li>
+							<!-- <li class="list-group-item">Nom d'utilisateur : {{ user.username }}</li>
+							 -->
+							 <li class="list-group-item">Numéro de téléphone : {{ user.tel }}</li>
+							<li class="list-group-item">Nom : {{ user.lastname }}</li>
+							<li class="list-group-item">Prénom : {{ user.firstname }}</li>
+							<li class="list-group-item">E-mail : {{ user.email }}</li>
+							<li class="list-group-item">Code postal : {{ user.zip }}</li>
+							<li class="list-group-item">Ville : {{ user.city }}</li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="card col-md-4 p-0 m-3">
+					<div class="card-header">Toute les transactions</div>
+					<div class="card-content">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Montant</th>
+									<th>Points</th>
+									<th>Magasins</th>
+									<th>Date & Heure</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for tr in user.transactions %}
+									<tr>
+										<th>{{ tr.id }}</th>
+										<th>{{ tr.amount }}€</th>
+										<th>{{ tr.points }}</th>
+										<td><a href="{{ url('shop', {'id': tr.shop.id}) }}">{{ tr.shop.name }}</a></td>
+										<td>{{ tr.date|date('d/m/Y - H\\hi:s') }}</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<div class="card col-md-3 p-0 m-3">
+					<div class="card-header">Adhésions</div>
+					<div class="card-content">
+						<ul class="list-group list-group-flush">
+							{% for shop in user.MyShops %}
+								<li class="list-group-item"><a href="{{ url('shop', {'id': shop.id}) }}">{{ shop.name }}</a></li>
+							{% endfor %}
+						</ul>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+	{% endblock %}
+
+{% endif %}

@@ -1,0 +1,283 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réglages{% endblock %}
+{% block breadcrumb_items %}<li class="active">Réglages</li>{% endblock %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/intl-tel-input/14.0.10/css/intlTelInput.css">
+
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+
+	<style>
+
+		.iti-flag {background-image: url("//cdnjs.cloudflare.com/ajax/libs/intl-tel-input/14.0.10/img/flags.png");}
+		@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+			.iti-flag {background-image: url("//cdnjs.cloudflare.com/ajax/libs/intl-tel-input/14.0.10/img/flags@2x.png");}
+		}
+		.intl-tel-input {flex:1;}
+		.phone_input {border-radius: 0 5px 5px 0; width: 100%;}
+		.hide { display: none; }
+	</style>
+{% endblock %}
+
+{% block body_right %}
+	{% if form_sent == true %}
+		{% include 'toasts/settings_saved.html.twig' %}
+	{% endif %}
+	<div class="panel panel-default table_wrapper">
+		<div class="panel-heading">
+			Réglages
+			<a class="badge badge-primary float-right"
+				href="{{ url('desactivate_my_account') }}"
+				onClick="return confirm('Toutes vos données seront supprimées, vous souhaitez continuer ?');"
+				data-toggle="tooltip" data-placement="bottom"
+				title="Toutes vos données seront supprimées, votre numéro sera conservé par vos commerçants mais plus utilisée">
+				Désactiver mon compte
+			</a>
+
+		</div>
+		
+		<div class="panel-body container-fluid row justify-content-center align-items-baseline ml-0">
+
+			{{ form_start(general_form, {'attr': {'class': 'panel col-lg-5 col-md-12 m-lg-3 pb-md-3 bg-light'}}) }}
+				<div class="panel-heading bg-light"><b><u>Informations générales</u></b></div>
+				<div class="panel-body">
+				
+
+					{{ form_errors(general_form.firstname) }}
+					<div class="input-group pb-md-3" title="Prénom">
+						<div class="input-group-prepend">
+							<span class="input-group-text"><i class="fa fa-user"></i></span>
+						</div>
+						{{ form_widget(general_form.firstname, {'attr': {
+							'class': 'form-control',
+							'placeholder': "Prénom",
+						}}) }}
+					</div>
+
+					{{ form_errors(general_form.lastname) }}
+					<div class="input-group pb-md-3" title="Nom">
+						<div class="input-group-prepend">
+							<span class="input-group-text"><i class="fa fa-user"></i></span>
+						</div>
+						{{ form_widget(general_form.lastname, {'attr': {
+							'class': 'form-control',
+							'placeholder': "Nom",
+						}}) }}
+					</div>
+
+					{{ form_errors(general_form.tel) }}
+					<div class="input-group pb-md-3" title="Téléphone">
+						<div class="input-group-prepend">
+							<span class="input-group-text"><i class="fa fa-phone"></i></span>
+						</div>
+						{{ form_widget(general_form.tel, {'attr': {
+							'class': 'form-control phone_input',
+							'placeholder': "+32 000 00 00 00",
+							'id' : 'phone',
+							'onkeyup'    : "fieldEdit();",
+						}}) }}
+						<span id="valid-msg" class="hide">✓ Valid</span>
+						<span id="error-msg" class="hide"></span>
+						
+					</div>
+					{{ form_widget(general_form.countrycode, {'attr': {
+							'class': 'form-control phone_input',
+							'id':'countrycode',
+						}}) }}
+
+					{{ form_errors(general_form.email) }}
+					<div class="input-group pb-md-3" title="Adresse email">
+						<div class="input-group-prepend">
+							<span class="input-group-text"><i class="fa fa-at"></i></span>
+						</div>
+						{{ form_widget(general_form.email, {'attr': {
+							'class': 'form-control',
+							'placeholder': "Adresse e-mail",
+						}}) }}
+					</div>
+
+				
+
+					{{ form_errors(general_form.city) }}
+					<div class="input-group pb-md-3" title="Ville">
+						<div class="input-group-prepend">
+							<span class="input-group-text"><i class="fa fa-city"></i></span>
+						</div>
+						{{ form_widget(general_form.city, {'attr': {
+							'class': 'form-control',
+							'placeholder': "Ville",
+						}}) }}
+					</div>
+
+					{{ form_errors(general_form.zip) }}
+					<div class="input-group pb-md-3" title="Code postal">
+						<div class="input-group-prepend">
+							<span class="input-group-text"><i class="fa fa-map-marker-alt"></i></span>
+						</div>
+						{{ form_widget(general_form.zip, {'attr': {
+							'class': 'form-control',
+							'placeholder': "Code postal",
+						}}) }}
+					</div>
+					
+					{% set isUser = true %} 
+					{% for r in app.user.roles %}
+								{% if r == 'ROLE_ADMIN' or r == 'ROLE_VENDOR' %}
+									{% set isUser = false %} 
+								{% endif %}
+				{% endfor %}   
+				{% if isUser != true %}
+					{{ form_errors(general_form.address) }}
+					<div class="input-group pb-md-3" title="Adresse">
+						<div class="input-group-prepend">
+							<span class="input-group-text"><i class="fa fa-map-marker-alt"></i></span>
+						</div>
+						{{ form_widget(general_form.address, {'attr': {
+							'class': 'form-control',
+							'placeholder': "Adresse",
+						}}) }}
+					</div>
+				{% else %}
+					<div class="input-group pb-md-3" title="Adresse">
+					
+						{{ form_widget(general_form.address, {'attr': {
+							'class': 'form-control',
+							'style': 'display:none',
+							'placeholder': "Adresse",
+						}}) }}
+					</div>
+				{% endif %}
+
+					<button type="submit" id="sendlogin" class="btn btn-block btn-primary">Enregistrer</button>
+				</div>
+			{{ form_end(general_form) }}
+
+			{{ form_start(password_form, {'attr': {'class': 'panel col-lg-6 col-md-12 m-lg-3 pb-md-3 bg-light'}}) }}
+				<div class="panel-heading bg-light"><b><u>Modifier le mot de passe</b></u></div>
+				<div class="panel-body">
+
+					<div class="form-group">
+						{{ form_errors(password_form.oldPlainPassword) }}
+						{{ form_widget(password_form.oldPlainPassword, {'attr': {
+							'class': 'form-control',
+							'placeholder': 'Mot de passe actuel'
+						}}) }}
+					</div>
+
+					<div class="form-group">
+						{{ form_errors(password_form.plainPassword.first) }}
+						{{ form_widget(password_form.plainPassword.first, {'attr': {
+							'class': 'form-control',
+							'placeholder': 'Nouveau mot de passe'
+						}}) }}
+					</div>
+
+					<div class="form-group">
+						{{ form_errors(password_form.plainPassword.second) }}
+						{{ form_widget(password_form.plainPassword.second, {'attr': {
+							'class': 'form-control',
+							'placeholder': 'Confirmation du nouveau mot de passe'
+						}}) }}
+					</div>
+
+					<div class="checkbox mb-3">
+                            <a href="{{ url('begin_password_reset') }}" class=" float-right">Mot de passe oublié ?</a>
+                            <br/>
+                        </div>
+
+				
+					<button type="submit" id="sendlogin" class="btn btn-block btn-primary">Enregistrer</button>
+				</div>
+
+
+			<div class="panel-heading bg-light"><u><b>Paramétrage de notification</u></b></div>
+				<div class="panel-body">
+
+					<label class="checkbox">
+  <input type="checkbox" checked data-toggle="toggle"> SMS
+</label><hr>
+<label class="checkbox-inline">
+  <input type="checkbox" data-toggle="toggle"> EMAILS
+</label><hr>
+<label class="checkbox-inline">
+  <input type="checkbox" data-toggle="toggle"> NOTIFICATIONS
+</label><hr>
+
+
+					<button type="submit" id="sendlogin" class="btn btn-block btn-primary">Enregistrer</button>
+				</div>
+			{{ form_end(password_form) }}
+
+		</div>
+	</div>
+
+
+
+{% endblock %}
+
+
+{% block javascripts %}
+	{% set code_ = app.user.countrycode %}
+	<script src="//cdnjs.cloudflare.com/ajax/libs/intl-tel-input/14.0.10/js/intlTelInput.min.js"></script>
+	
+
+		<script>
+		
+  var input = document.querySelector(".phone_input"),
+  counrycode = document.querySelector("#user_form_countrycode"),
+  errorMsg = document.querySelector("#error-msg"),
+  validMsg = document.querySelector("#valid-msg");
+
+// here, the index maps to the error code returned from getValidationError - see readme
+var errorMap = [ "Invalid number", "Invalid country code", "Too short", "Too long", "Invalid number"];
+
+// initialise plugin
+var iti = window.intlTelInput(input, {
+  utilsScript: "https://intl-tel-input.com/node_modules/intl-tel-input/build/js/utils.js?1537727621611"
+});
+
+var code = "{{ code_ }}" ;
+iti.setCountry(this.code);
+console.log(code);
+var reset = function() {
+  input.classList.remove("error");
+  errorMsg.innerHTML = "";
+  errorMsg.classList.add("hide");
+  validMsg.classList.add("hide");
+};
+
+input.addEventListener('countrychange', function(e) {
+  counrycode.value = iti.getSelectedCountryData().iso2;
+});
+
+// on blur: validate
+input.addEventListener('blur', function() {
+  reset();
+  if (input.value.trim()) {
+    if (iti.isValidNumber()) {
+      validMsg.classList.remove("hide");
+    } else {
+      input.classList.add("error");
+      var errorCode = iti.getValidationError();
+      errorMsg.innerHTML = errorMap[errorCode];
+      errorMsg.classList.remove("hide");
+    }
+  }
+});
+
+// on keyup / change flag: reset
+input.addEventListener('change', reset);
+input.addEventListener('keyup', reset);
+
+function fieldEdit(){
+	var el = document.getElementById("user_form_tel");
+	var val = el.value.replace(/\s/g, "");
+	el.value=val;
+	iti.setCountry(iti.getSelectedCountryData().iso2);
+}
+	</script>
+
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+{% endblock %}

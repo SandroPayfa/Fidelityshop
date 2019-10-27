@@ -1,0 +1,525 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commerçant{% endblock %}
+
+
+{% if shop[0] is defined %}
+{% set shop = shop[0] %}
+
+{% block breadcrumb_items %}
+<li><a href="{{ url('shop') }}">Magasins Commercant</a></li>
+<li class="active">{{ shop.name }}</li> 
+{% endblock %}
+
+{% block body_right %}
+{% if form_sent == true %}
+{% include 'toasts/settings_saved.html.twig' %}
+{% endif %}
+
+
+<div class="panel panel-default table_wrapper">
+    <div class="panel-heading"><li class="fas fa-store"></li> {{ shop.name }}</div>
+        <div class="panel-body row">
+            <div class="col-md-6">
+                <div class="card col-md-12">
+                    <div class="card-header">Clés de licence et ID Terminal</div>
+                    <div class="card-body">
+                        <div class="card-text">
+                            <div class="input-group">
+                                {% for licence in shop.licences %}
+                                <input disabled value="{{ licence.serial }}" class="col-md-7 text-center" onClick="this.select();">
+                                <input disabled value="ID{{ licence.terminalId }}" class="col-md-2 text-center" onClick="this.select();">
+                                <th>
+                            </th>
+
+                                
+                                {% if 'ROLE_VENDOR' in app.user.roles %}
+
+
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <center><a href="{{ url('licences') }}" class="btn btn-sm btn-primary float-right">Détails licences</a></center><br>
+
+                </div>
+
+
+                <div class="card col-md-12 ">
+                    <div class="card-header"><li class="fas fa-coins"></li> Points de fidélité</div>
+                    <div class="card-body">
+
+                        {{ form_start(edit_shop_form, {'attr': {'class': ''}}) }}
+
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <p>Entrez ici la correspondance en euro désirés
+                                </p>
+                                <p>
+                                    Pour
+                                    <span>{{ form_widget(edit_shop_form.spend_rate, {'attr': {
+                            'class': 'col-md-2',
+                        }}) }}</span>
+                                    euro dépensé
+                                </p>
+
+                            </li>
+                            <li class="list-group-item">
+
+                                <p>Entrez ici la correspondance en points désirés</p>
+                                <p>
+                                    Pour
+                                    <span>{{ form_widget(edit_shop_form.reward_rate, {'attr': {
+                            'class': 'col-md-2',
+                        }}) }}</span>
+
+                                    Points échangés
+                                </p>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Seuil</span>
+                                    </div>
+                                    {{ form_widget(edit_shop_form.threshold, {'attr': {
+                                    'class': 'form-control',
+                                    }}) }}
+                                </div>
+
+                            </li>
+                            
+                        </ul>
+                    </div>
+                </div>
+                <div class="card col-md-12 ">
+                    <div class="card-header">Système de réduction</div>
+                    <div class="card-body">
+
+
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <p>
+                                    Indiqué le montant de la réduction pour le client
+                                    <span>{{ form_widget(edit_shop_form.reduction_montant, {'attr': {
+                            'class': 'col-md-2',
+                        }}) }}</span>
+                                    €
+                                </p>
+
+                            </li>
+                            <li class="list-group-item">
+
+                                <p>
+                                    Indiqué le nombre de points qu'il faut atteindre pour bénéficier de la réduction <br> <span>{{ form_widget(edit_shop_form.reduction_points, {'attr': {
+                            'class': 'col-md-2',
+                        }}) }}</span> points 
+
+                                </p>
+                            </li>
+                            <li class="list-group-item">
+                                <p>
+                                    {{shop.reductionmontant}} € de remise après {{shop.reductionpoints}} points
+                                </p>
+                            </li>
+                            
+                        </ul>
+                    </div>
+                </div>
+                <div class="card col-md-12">
+                    <div class="card-header"><i class="far fa-info-circle"></i> Informations complémentaires</div>
+                    <div class="card-body p-0">
+                    <FONT face="Verdana" size="1"><b>Toutes les informations seront visible pour vos clients</b></FONT>
+
+
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <div class="input-group" title="Nom du magasin">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa fa-phone"></i></span>
+                                    </div>
+
+                                    {{ form_widget(edit_shop_form.tel, {'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': "Téléphone",
+                                    }}) }}
+
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="input-group" title="Adresse">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa fa-link"></i></span>
+                                    </div>
+
+                                    {{ form_widget(edit_shop_form.website, {'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': "Site Web",
+                                    }}) }}
+
+
+                                </div>
+                                <br>
+                                <FONT face="Verdana" color="#FF0000" size="1"><b>E-mail visible pour vos clients</b></FONT>
+
+                                <div class="input-group" title="Adresse">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa fa-envelope"></i></span>
+                                    </div>
+                                    {{ form_widget(edit_shop_form.email, {'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': "E-mail",
+                                    }}) }}
+
+
+                                </div>
+                                <hr>
+                                <div class="input-group" title="Adresse">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fab fa-facebook"></i></span>
+                                    </div>
+                                    {{ form_widget(edit_shop_form.facebook, {'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': "Facebook",
+                                    }}) }}
+
+                                </div>
+                                <hr>
+                                <div class="input-group" title="Adresse">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fab fa-twitter"></i></span>
+                                    </div>
+                                    {{ form_widget(edit_shop_form.twitter, {'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': "Twitter",
+                                    }}) }}
+
+                                </div>
+
+                                <hr>
+                                <div class="input-group" title="Adresse">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fab fa-instagram "></i></span>
+                                    </div>
+                                    {{ form_widget(edit_shop_form.instagram, {'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': "Instagram",
+                                    }}) }}
+
+                                </div>
+
+                                <hr>
+                                <div class="input-group" title="Adresse">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fab fa-linkedin"></i></span>
+                                    </div>
+                                    {{ form_widget(edit_shop_form.linkdin, {'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': "Linkedin",
+                                    }}) }}
+
+                                </div>
+                            </li>
+                            <li class="list-group-item bb-0 bg-none">
+
+
+                            </li>
+                            
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card col-md-12 ">
+                    <div class="card-header"><li class="fas fa-store"></li> Informations sur votre magasin</div>
+                    <FONT face="Verdana" color="#FF0000" size="1"><b>Les informations seront visible pour vos clients</b></FONT>
+                    <div class="card-body">
+
+                        <ul class="list-group list-group-flush">
+                        
+
+                            <li class="list-group-item">
+                                {{ form_errors(edit_shop_form.image) }}
+                                <div class="input-group" title="Nom du magasin">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa fa-image"></i></span>
+                                    </div>
+                                    
+                                    <img src="{{asset('uploads/brochures/' ~ shop.image)}}" style="height:56px;width:56px" class="img-fluid" alt="Responsive image">
+                                    {{ form_widget(edit_shop_form.image, {'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': "Nom du magasin",
+                                    }}) }}
+                                </div>
+                            </li>
+
+                            <li class="list-group-item">
+                                {{ form_errors(edit_shop_form.name) }}
+                                <div class="input-group" title="Nom du magasin">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa fa-store"></i></span>
+                                    </div>
+                                    {{ form_widget(edit_shop_form.name, {'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': "Nom du magasin",
+                                    }}) }}
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                {{ form_errors(edit_shop_form.address) }}
+                                <div class="input-group" title="Adresse">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa fa-map-marker-alt"></i></span>
+                                    </div>
+                                    {{ form_widget(edit_shop_form.address, {'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': "Adresse",
+                                    }}) }}
+                                </div>
+                            </li>
+                            {{ form_errors(edit_shop_form.zip) }}
+                            {{ form_errors(edit_shop_form.city) }}
+                            <li class="list-group-item">
+                                <div class="input-group" title="Adresse">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa fa-map-pin"></i></span>
+                                    </div>
+                                    {{ form_widget(edit_shop_form.zip, {'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': "Code postal",
+                                    }}) }}
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="input-group" title="Adresse">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-city"></i></span>
+                                    </div>
+                                    {{ form_widget(edit_shop_form.city, {'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': "Ville",
+                                    }}) }}
+                                </div>
+                            </li>
+                          <li class="list-group-item">
+                                <div class="input-group" title="Adresse">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa fa-flag"></i></span>
+                                    </div>
+                                    {{ form_widget(edit_shop_form.pays, {'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': "Pays",
+                                    }}) }}
+                                </div>
+                            </li>
+                            {% if 'ROLE_ADMIN' in app.user.roles %}
+                            <li class="list-group-item">
+                                <div class="input-group" title="Adresse">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon3">Commerçant</span>
+                                    </div>
+                                    <select class="form-control custom-select" id="add_shop_form_user_id_id" name="user_id">
+                                    {% if current_vendor == null %} <option>Selectionnez un vendeur</option> {% endif %}
+                                    {% for vendor in vendors %}
+                                    <option
+                                    {% if current_vendor %}
+                                     {% if vendor.id == current_vendor.id %}selected{% endif %}  {% endif %} 
+                                     value="{{vendor.id}}">{{vendor.firstname}} {{vendor.lastname}}</option>
+                                    {% endfor %}
+                                    </select>
+                                </div>
+                            </li>
+                            {% endif %}
+                            
+                        </ul>
+
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="card-header"> <i class="far fa-clock"></i> Horaires du magasin</div>
+                    <FONT face="Verdana" size="1"><b>Les informations seront visible pour vos clients</b></FONT>
+                    <div class="card-body">
+
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>Jour</th>
+                                <th>Heure d'ouverture</th>
+                                <th>Heure de fermeture</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    Lundi
+                                </td>
+                                <td>
+                                    {{ form_widget(edit_shop_form.o_j_1, {'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': "Heure de début",
+                                    }}) }}
+                                </td>
+                                <td>
+                                    {{ form_widget(edit_shop_form.f_j_1, {'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': "Heure de fin",
+                                    }}) }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Mardi
+                                </td>
+                                <td>
+                                    {{ form_widget(edit_shop_form.o_j_2, {'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': "Heure de début",
+                                    }}) }}
+                                </td>
+                                <td>
+                                    {{ form_widget(edit_shop_form.f_j_2, {'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': "Heure de fin",
+                                    }}) }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Mercredi
+                                </td>
+                                <td>
+                                    {{ form_widget(edit_shop_form.o_j_3, {'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': "Heure de début",
+                                    }}) }}
+                                </td>
+                                <td>
+                                    {{ form_widget(edit_shop_form.f_j_3, {'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': "Heure de fin",
+                                    }}) }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Jeudi
+                                </td>
+                                <td>
+                                    {{ form_widget(edit_shop_form.o_j_4, {'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': "Heure de début",
+                                    }}) }}
+                                </td>
+                                <td>
+                                    {{ form_widget(edit_shop_form.f_j_4, {'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': "Heure de fin",
+                                    }}) }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Vendredi
+                                </td>
+                                <td>
+                                    {{ form_widget(edit_shop_form.o_j_5, {'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': "Heure de début",
+                                    }}) }}
+                                </td>
+                                <td>
+                                    {{ form_widget(edit_shop_form.f_j_5, {'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': "Heure de fin",
+                                    }}) }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Samedi
+                                </td>
+                                <td>
+                                    {{ form_widget(edit_shop_form.o_j_6, {'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': "Heure de début",
+                                    }}) }}
+                                </td>
+                                <td>
+                                    {{ form_widget(edit_shop_form.f_j_6, {'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': "Heure de fin",
+                                    }}) }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Dimanche
+                                </td>
+                                <td>
+                                    {{ form_widget(edit_shop_form.o_j_7, {'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': "Heure de début",
+                                    }}) }}
+                                </td>
+                                <td>
+                                    {{ form_widget(edit_shop_form.f_j_7, {'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': "Heure de fin",
+                                    }}) }}
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <button type="submit" class="btn btn-sm float-right btn-primary">Enregistrer</button>
+
+                        {{ form_end(edit_shop_form) }}
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{% if 'ROLE_VENDOR' in app.user.roles %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.33.1/sweetalert2.min.js"></script>
+<script>
+function edit_pin(licence_id,shop_id){
+    Swal.fire({
+        type: "info",
+        html:
+		'<div class="col-md-12 col-sm-12">'+
+         '   <div class="card">'+
+          '      <div class="card-body">'+
+           '         <h2 class="card-title">Modifier Pin</h2>'+
+            '             <form action="https://fidelityshop.be/connexion/public/shop/'+shop_id+'/update" method="post">'+
+             '           <input type="hidden" name="_csrf_token" value="nEp3mNI7H9r-zkFgnIr2xO9e4QmXgTRHRtJDFOexZPs">'+
+			  '           <input type="hidden" value="'+licence_id+'" name="licence_id" value="nEp3mNI7H9r-zkFgnIr2xO9e4QmXgTRHRtJDFOexZPs">'+
+              '          <div class="input-group">'+
+		'					<div class="input-group-prepend">'+
+		' <span class="input-group-text" id="pin">Pin</span>'+
+                '</div><input type="number" name="pin" required>'+
+		'				</div><br>'+ 
+         '               <button type="submit" id="sendlogin" class="btn btn-primary float-right">Modifier pin</button>'+
+          '          </form>'+
+           '     </div>'+
+            '</div>'+
+        '</div>',
+        showCancelButton: false,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "ANNULER ",
+        cancelButtonText: "ANNULER",
+        allowOutsideClick: false,
+    }).then(result => {
+    });
+}
+</script>
+{% endif %}
+{% endblock %}
+{% endif %}
+

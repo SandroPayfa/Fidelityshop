@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="initial-scale=1">
+		<title>{% block title %}Accueil{% endblock %} - FidelityShop</title>
+
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+		 <link href="https://fidelityshop.be/connexion/mailing/css/style.css" rel="stylesheet">
+		  <link href="https://fidelityshop.be/connexion/mailing/css/color-picker.css" rel="stylesheet">
+		   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<link href="https://unpkg.com/bootstrap-table@1.14.2/dist/bootstrap-table.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue2-timepicker@0.1.4/src/style/vue-timepicker.css">
+		<link rel="stylesheet" href="{{ asset('assets/css/datetimepicker.css') }}">
+		<link rel="stylesheet" href="{{ asset('assets/css/old.css') }}">
+		<link rel="stylesheet" href="{{ asset('assets/css/global.css') }}">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.33.1/sweetalert2.min.css" />
+		{% block stylesheets %}{% endblock %}
+	</head>
+	<body>
+		{% for message in app.flashes('notice') %}
+			<div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+				<div class="toast-header">
+					<strong class="mr-auto">Information</strong>
+					<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="toast-body">{{ message }}</div>
+			</div>
+		{% endfor %}
+
+		<nav class="navbar navbar-custom navbar-fixed-top">
+			<a class="navbar-brand" href="{{ url('main') }}"><span>Fidelity</span>Shop</a>
+
+			<ul class="navbar-nav">
+				{% if app.user is null %}
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url('app_login') }}"><i class="fa fa-power-off"></i> Connexion</a>
+					</li>
+				{% endif %}
+			</ul>
+
+			{% if app.user is not null %}
+				<button class="navbar-toggler sidebar-toggler d-lg-none toggled" type="button">
+					<span class="sidebar-toggler-icon">☰</span>
+				</button>
+
+				<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+					<div class="profile-sidebar clearfix">
+						<div class="profile-userpic">
+							<img src="https://ui-avatars.com/api/?background=0D8ABC&amp;color=fff&amp;name={{ app.user.username }}" class="img-responsive" alt="">
+						</div>
+						<a href="{{ url('user', {"id": app.user.id}) }}" class="profile-usertitle">
+							<div class="profile-usertitle-name">{{ app.user.lastname }} {{ app.user.firstname }}</div>
+							{% if 'ROLE_ADMIN' in app.user.roles %}
+								<div class="is_admin_notice"><i class="fa fa-check"></i> Admin PRO</div>
+							{% endif %}
+							{% if 'ROLE_VENDOR' in app.user.roles %}
+								<div class="is_admin_notice"><i class="fa fa-check"></i> Commerçant</div>
+							{% endif %}
+							{% if 'ROLE_CUSTOMER' in app.user.roles %}
+								<div class="is_admin_notice"><i class="fa fa-check"></i> Client</div>
+							{% endif %}
+							{% if 'ROLE_REVENDEUR' in app.user.roles %}
+								<div class="is_admin_notice"><i class="fa fa-check"></i> Revendeur</div>
+							{% endif %}
+						</a>
+						<div class="clear"></div>
+					</div>
+					<div class="divider"></div>
+		
+					<ul class="nav menu">
+						{% set controller = app.request.attributes.get("_route") %}
+
+						<li class="nav-item {% if 'main' in controller %}active{% endif %}">
+							<a class="nav-link" href="{{ url('main') }}"><i class="fa fa-home"></i> Accueil</a>
+						</li>
+
+						{% if 'ROLE_ADMIN' in app.user.roles %}
+							<li class="nav-item {% if 'users' in controller %}active{% endif %}">
+								<a class="nav-link" href="{{ url('users') }}"><i class="fa fa-users"></i> Utilisateurs</a>
+							</li>
+							<li class="nav-item {% if 'licences' in controller %}active{% endif %}">
+								<a class="nav-link" href="{{ url('licences') }}"><i class="fa fa-key"></i> Licences</a>
+							</li>
+						{% endif %}
+
+						{% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_VENDOR' in app.user.roles %}
+							<li class="nav-item {% if 'shop' in controller %}active{% endif %}">
+								<a class="nav-link" href="{{ url('shop') }}"><i class="fa fa-shopping-basket"></i> Magasins</a>
+							</li>
+						{% endif %}
+
+
+
+
+
+						{% if 'ROLE_REVENDEUR' in app.user.roles %}
+							
+							<li class="nav-item {% if 'licences' in controller %}active{% endif %}">
+								<a class="nav-link" href="{{ url('licences') }}"><i class="fa fa-key"></i> Licences</a>
+							</li>
+						{% endif %}
+
+
+
+
+
+
+
+
+
+
+
+						{% if 'ROLE_CUSTOMER' in app.user.roles %}
+							<li class="nav-item {% if 'my_shops' in controller %}active{% endif %}">
+								<a class="nav-link" href="{{ url('my_shops') }}"><i class="fa fa-shopping-basket"></i> Mes Magasins</a>
+							</li>
+						{% endif %}
+
+						{% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_VENDOR' in app.user.roles %}
+							<li class="nav-item {% if 'customers' in controller %}active{% endif %}">
+								<a class="nav-link" href="{{ url('customers') }}"><i class="fa fa-users"></i> Clients</a>
+							</li>
+							<li class="nav-item {% if 'news' in controller %}active{% endif %}">
+								<a class="nav-link" href="{{ url('news') }}"><i class="fa fa-calendar"></i> Actualités</a>
+							</li>
+						{% endif %}
+
+						<li class="nav-item {% if 'transactions' in controller %}active{% endif %}">
+							<a class="nav-link" href="{{ url('transactions') }}"><i class="fa fa-exchange-alt"></i> Transactions</a>
+						</li>
+						<li class="nav-item {% if 'settings' in controller %}active{% endif %}">
+							<a class="nav-link" href="{{ url('settings') }}"><i class="fa fa-cog"></i> Réglages</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{{ url('logout') }}"><i class="fa fa-power-off"></i> Déconnexion</a>
+						</li>
+					</ul>
+				</div>
+			{% endif %}
+		</nav>
+
+		{% if app.user is not null %}
+			{% set main_wrapper_class = 'col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2' %}
+		{% else %}
+			{% set main_wrapper_class = 'col-md-12' %}
+		{% endif %}
+
+		<div class="{{ main_wrapper_class }} float-right main">
+
+			{% if app.user is not null %} 
+				<ol class="breadcrumb" >
+					<a href="{{ url('main') }}">
+						<li><i class="fa fa-home"></i></li>
+					</a>
+					{% block breadcrumb_items %}{% endblock %}
+				</ol>
+				{% if app.request.attributes.get('_route')=='transactions' and 'ROLE_VENDOR' in app.user.roles and 'ROLE_ADMIN' not in app.user.roles %}
+				<span style="cursor:pointer" onClick="toggleFilter()" class="badge badge-success" >Offerts</span>
+				{% endif %}	
+				
+			{% endif %}
+
+			{% block body_right %}{% endblock %}
+		</div>
+		{% block body %}{% endblock %}
+
+		<div class="scripts">
+		<script src="{{ asset('assets/js/moment-with-locales.js') }}"  charset="UTF-8"></script>
+			<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+			<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+			<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script>
+			<script src="https://unpkg.com/bootstrap-table@1.14.2/dist/bootstrap-table.min.js"></script>
+
+    <script src="https://fidelityshop.be/connexion/mailing/js/zoo.min.js"></script>
+    <script src="https://fidelityshop.be/connexion/mailing/js/main.js"></script>
+			<script src="{{ asset('assets/js/datetimepicker.js') }}"  charset="UTF-8"></script>
+			<script src="{{ asset('assets/js/global.js') }}"></script>
+			{% block javascripts %}{% endblock %}
+		</div>
+	</body>
+</html>
